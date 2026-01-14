@@ -1,0 +1,27 @@
+.footer {
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    padding: 2rem 0;
+    margin-top: auto;
+    background: rgba(0, 0, 0, 0.02);
+}
+
+@media (prefers-color-scheme: dark) {
+    .footer {
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        background: rgba(255, 255, 255, 0.02);
+    }
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+    text-align: center;
+    color: var(--foreground);
+    opacity: 0.6;
+}
+
+.subtext {
+    font-size: 0.85rem;
+    margin-top: 0.5rem;
+}
