@@ -92,40 +92,70 @@
     pointer-events: auto;
     /* Re-enable clicks on the button itself */
     display: flex;
-    justify-content: center;
-    gap: 0.5rem;
-    padding: 0.4rem;
+    position: relative;
+    /* justify-content: center; REMOVED to align with pill */
+    padding: 4px;
+    width: 240px;
+    /* Fixed width for pill calculation */
+    height: 48px;
 
-    /* FROZEN GLASS - REMOVED EDGE LIGHT from here */
-    background: rgba(0, 0, 0, 0.6);
-    backdrop-filter: blur(25px) saturate(140%);
-    -webkit-backdrop-filter: blur(25px) saturate(140%);
-    border: 1px solid rgba(255, 255, 255, 0.15);
+    /* FROZEN GLASS RESTORED */
+    background: rgba(40, 40, 40, 0.3);
+    backdrop-filter: blur(25px) saturate(180%);
+    -webkit-backdrop-filter: blur(25px) saturate(180%);
+
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
     border-radius: 100px;
-    box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.5);
-    transition: all 0.3s ease;
+    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+
+    overflow: hidden;
+    /* For pill containment */
+}
+
+/* SLIDING PILL CONTAINER */
+.navBackgroundContainer {
+    position: absolute;
+    top: 4px;
+    bottom: 4px;
+    left: 4px;
+    right: 4px;
+    z-index: 0;
+}
+
+.activePill {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 50%;
+    /* Half of the container */
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 100px;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+    /* Subtle rim */
 }
 
 .navItem {
-    padding: 0.7rem 2rem;
-    border-radius: 100px;
-    border: none;
+    flex: 1;
+    /* Split width evenly */
+    z-index: 2;
     background: transparent;
-    color: rgba(255, 255, 255, 0.5);
-    font-size: 0.95rem;
-    font-weight: 500;
+    border: none;
     cursor: pointer;
-    transition: all 0.3s;
-    position: relative;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.5);
+    transition: color 0.3s;
+    border-radius: 100px;
 }
 
 .navItem:hover {
     color: #fff;
 }
 
+/* Active state handled by pill, just text color here */
 .navItem.active {
     color: #fff;
-    background: rgba(255, 255, 255, 0.1);
-    box-shadow: inset 0 0 15px rgba(255, 255, 255, 0.05);
-    text-shadow: 0 0 20px rgba(255, 255, 255, 0.4);
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
 }
