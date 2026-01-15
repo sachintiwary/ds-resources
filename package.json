@@ -9,19 +9,19 @@
     "lint": "eslint"
   },
   "dependencies": {
-    "@prisma/client": "^6.19.2",
-    "next": "16.1.1",
-    "react": "19.2.3",
-    "react-dom": "19.2.3"
+    "clsx": "latest",
+    "framer-motion": "latest",
+    "lucide-react": "latest",
+    "next": "latest",
+    "react": "latest",
+    "react-dom": "latest"
   },
   "devDependencies": {
-    "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "dotenv": "^17.2.3",
-    "eslint": "^9",
-    "eslint-config-next": "16.1.1",
-    "prisma": "^6.19.2",
-    "typescript": "^5"
+    "@types/node": "latest",
+    "@types/react": "latest",
+    "@types/react-dom": "latest",
+    "eslint": "^8.57.1",
+    "eslint-config-next": "latest",
+    "typescript": "latest"
   }
 }

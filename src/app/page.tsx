@@ -1,97 +1,94 @@
-import Header from '@/components/Header';
-import Footer from '@/components/Footer';
-import ResourceGrid from '@/components/ResourceGrid';
-import styles from './page.module.css';
-import Link from 'next/link';
+'use client';
+
+import { useState } from 'react';
 import { RESOURCES, CATEGORIES } from '@/data/resources';
+import styles from './page.module.css';
+import { Search, ExternalLink } from 'lucide-react';
+import Link from 'next/link';
 
-export const dynamic = 'force-dynamic';
+export default function Home() {
+    const [activeCategory, setActiveCategory] = useState('all');
+    const [searchQuery, setSearchQuery] = useState('');
 
-export default async function Home({
-  searchParams,
-}: {
-  searchParams: Promise<{ category?: string; search?: string }> | { category?: string; search?: string };
-}) {
-  const resolvedSearchParams = await searchParams;
-  const categorySlug = resolvedSearchParams?.category || 'all';
-  const calculateSearch = resolvedSearchParams?.search || '';
+    const filtered = RESOURCES.filter(r => {
+        const matchesCat = activeCategory === 'all' || r.category.slug === activeCategory;
+        const matchesSearch = r.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            r.description.toLowerCase().includes(searchQuery.toLowerCase());
+        return matchesCat && matchesSearch;
+    });
 
-  let filteredResources = [...RESOURCES];
+    return (
+        <main className={styles.main}>
+            <div className={styles.bg} />
 
-  if (categorySlug !== 'all') {
-    filteredResources = filteredResources.filter(r => r.category.slug === categorySlug);
-  }
+            <section className={styles.hero}>
+                <h1 className={styles.title}>
+                    Study Mode
+                    <span style={{ display: 'block', fontSize: '0.4em', fontWeight: 400, opacity: 0.7, marginTop: '10px' }}>
+                        Data Science & AI Resources
+                    </span>
+                </h1>
+                <p className={styles.subtitle}>
+                    Premium curated collection of High-Quality tools, libraries, and courses.<br />
+                    Elevate your learning stack.
+                </p>
 
-  if (calculateSearch) {
-    const searchLower = calculateSearch.toLowerCase();
-    filteredResources = filteredResources.filter(r =>
-      r.title.toLowerCase().includes(searchLower) ||
-      r.description.toLowerCase().includes(searchLower)
+                <div className={styles.searchContainer}>
+                    <input
+                        type="text"
+                        placeholder="Search by name, tag or description..."
+                        className={styles.searchInput}
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                    />
+                </div>
+            </section>
+
+            <nav className={styles.filterBar}>
+                <button
+                    className={`${styles.categoryChip} ${activeCategory === 'all' ? styles.active : ''}`}
+                    onClick={() => setActiveCategory('all')}
+                >
+                    All
+                </button>
+                {CATEGORIES.map(cat => (
+                    <button
+                        key={cat.id}
+                        className={`${styles.categoryChip} ${activeCategory === cat.slug ? styles.active : ''}`}
+                        onClick={() => setActiveCategory(cat.slug)}
+                    >
+                        {cat.name}
+                    </button>
+                ))}
+            </nav>
+
+            <section className={styles.grid}>
+                {filtered.map((r, i) => (
+                    <a
+                        key={r.id}
+                        href={r.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={styles.card}
+                        style={{ animationDelay: `${i * 0.05}s` }} // Staggered entrance
+                    >
+                        <div className={styles.cardCategory}>{r.category.name}</div>
+                        <h3 className={styles.cardTitle}>{r.title}</h3>
+                        <p className={styles.cardDesc}>{r.description}</p>
+                        <div className={styles.cardFooter}>
+                            {r.tags.map(t => (
+                                <span key={t.name} className={styles.tag}>{t.name}</span>
+                            ))}
+                        </div>
+                    </a>
+                ))}
+            </section>
+
+            {filtered.length === 0 && (
+                <div style={{ textAlign: 'center', marginTop: '4rem', opacity: 0.5 }}>
+                    <p>No signal found matching coordinates.</p>
+                </div>
+            )}
+        </main>
     );
-  }
-
-  // Sort by Newest (simulated by ID logic or just existing order)
-  filteredResources.sort((a, b) => b.id - a.id);
-
-  return (
-    <main className={styles.main}>
-      <Header />
-
-      <section className={styles.hero}>
-        <h1 className={styles.title}>Data Science & ML Resources</h1>
-        <p className={styles.subtitle}>
-          A curated collection of the best tools, libraries, and learning materials.
-        </p>
-
-        <form className={styles.searchForm} action={async (formData) => {
-          "use server";
-          const query = formData.get('search')?.toString();
-          const cat = categorySlug;
-          let url = '/';
-          if (cat && cat !== 'all') url += `?category=${cat}`;
-          if (query) url += `${url.includes('?') ? '&' : '?'}search=${query}`;
-          else if (cat === 'all') url = '/';
-
-          const { redirect } = await import('next/navigation');
-          redirect(url);
-        }}>
-          <input
-            type="text"
-            name="search"
-            placeholder="Search resources..."
-            className={styles.searchInput}
-            defaultValue={calculateSearch}
-          />
-        </form>
-
-        <div className={styles.categories}>
-          <Link
-            href="/"
-            className={`${styles.categoryChip} ${categorySlug === 'all' ? styles.active : ''}`}
-          >
-            All
-          </Link>
-          {CATEGORIES.map((cat) => (
-            <Link
-              key={cat.id}
-              href={`/?category=${cat.slug}${calculateSearch ? `&search=${calculateSearch}` : ''}`}
-              className={`${styles.categoryChip} ${categorySlug === cat.slug ? styles.active : ''}`}
-            >
-              {cat.name}
-            </Link>
-          ))}
-        </div>
-      </section>
-
-      <section className={styles.content}>
-        {filteredResources.length > 0 ? (
-          <ResourceGrid resources={filteredResources as any} />
-        ) : (
-          <div className={styles.emptyState}>No resources found.</div>
-        )}
-      </section>
-
-      <Footer />
-    </main>
-  );
 }
