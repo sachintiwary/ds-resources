@@ -45,7 +45,7 @@ async function getCategories() {
   }
 }
 
-export default async function Home({ searchParams }: { searchParams: { category?: string; search?: string } }) {
+export default async function Home({ searchParams }: { searchParams: Promise<{ category?: string; search?: string }> }) {
   const { category, search } = await searchParams; // Next.js 15 requires awaiting searchParams, or 14 works directly. Safest to await if type says Promise, but here type is object. 
   // Wait, in Next.js 15 searchParams is a Promise. In 14 it's an object. 
   // Since I just installed latest, it's likely 15 (RC) or 14 latest. 
