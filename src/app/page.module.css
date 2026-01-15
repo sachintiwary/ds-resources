@@ -21,14 +21,21 @@
     justify-content: center;
     gap: 0.5rem;
     padding: 0.4rem;
-    /* FROZEN GLASS EFFECT */
-    background: rgba(255, 255, 255, 0.08);
-    backdrop-filter: blur(40px) saturate(180%);
-    -webkit-backdrop-filter: blur(40px) saturate(180%);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    border-top-color: rgba(255, 255, 255, 0.25);
+
+    /* REFRACTIVE GLASS */
+    background: linear-gradient(135deg,
+            rgba(255, 255, 255, 0.1) 0%,
+            rgba(255, 255, 255, 0.01) 50%,
+            rgba(255, 255, 255, 0.05) 100%);
+    backdrop-filter: blur(24px) saturate(200%);
+    -webkit-backdrop-filter: blur(24px) saturate(200%);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 100px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    box-shadow:
+        0 8px 32px rgba(0, 0, 0, 0.3),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.1);
 }
 
 .navItem {
@@ -51,10 +58,10 @@
 }
 
 .navItem.active {
-    background: rgba(255, 255, 255, 0.15);
+    background: rgba(255, 255, 255, 0.2);
     color: #fff;
-    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.2);
-    text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+    box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.1);
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.4);
     font-weight: 600;
 }
 
@@ -67,7 +74,6 @@
     align-items: center;
     text-align: center;
     padding: 8rem 1.5rem 2rem;
-    /* Add top padding for nav */
     perspective: 1000px;
 }
 
@@ -78,7 +84,6 @@
 
 .title {
     font-size: clamp(3rem, 10vw, 8rem);
-    /* Responsive font sizing */
     font-weight: 800;
     line-height: 0.9;
     letter-spacing: -0.04em;
@@ -128,14 +133,15 @@
     transform: translateY(-50%);
     color: var(--text-secondary);
     pointer-events: none;
+    z-index: 5;
 }
 
 .searchInput {
     width: 100%;
-    /* FROZEN INPUT */
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-top-color: rgba(255, 255, 255, 0.2);
+    /* REFRACTIVE INPUT */
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.01) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-top: 1px solid rgba(255, 255, 255, 0.3);
     border-radius: 20px;
     padding: 1rem 1rem 1rem 3rem;
     color: #fff;
@@ -144,11 +150,12 @@
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     transition: all 0.3s ease;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
 }
 
 .searchInput:focus {
     outline: none;
-    background: rgba(255, 255, 255, 0.1);
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.02) 100%);
     border-color: rgba(255, 255, 255, 0.4);
     box-shadow: 0 0 30px rgba(255, 255, 255, 0.05);
 }
@@ -186,17 +193,36 @@
     box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
 }
 
-/* --- CARDS (FROZEN BASE) --- */
+/* --- CARDS (REFRACTIVE BASE) --- */
 .cardBase {
-    background: rgba(255, 255, 255, 0.03);
+    /* REFRACTION MOCKUP */
+    background: linear-gradient(135deg,
+            rgba(255, 255, 255, 0.08) 0%,
+            rgba(255, 255, 255, 0.01) 100%);
     border: 1px solid rgba(255, 255, 255, 0.1);
-    border-top-color: rgba(255, 255, 255, 0.15);
+    border-top: 1px solid rgba(255, 255, 255, 0.25);
+    border-left: 1px solid rgba(255, 255, 255, 0.15);
     backdrop-filter: blur(30px) saturate(120%);
     -webkit-backdrop-filter: blur(30px) saturate(120%);
     border-radius: 24px;
     overflow: hidden;
     position: relative;
-    box-shadow: 0 4px 24px -1px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.3);
+}
+
+.cardBase::after {
+    /* Diagonal shine */
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(120deg,
+            transparent 30%,
+            rgba(255, 255, 255, 0.05) 45%,
+            transparent 60%);
+    pointer-events: none;
 }
 
 /* --- LIBRARY GRID --- */
@@ -210,7 +236,6 @@
 @media (max-width: 600px) {
     .grid {
         grid-template-columns: 1fr;
-        /* Single column on mobile */
         gap: 1rem;
     }
 }
@@ -218,14 +243,13 @@
 .libCard {
     composes: cardBase;
     height: 300px;
-    /* Default height */
     padding: 1.5rem;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     text-decoration: none;
     color: inherit;
-    transition: transform 0.3s, border-color 0.3s;
+    transition: transform 0.3s, box-shadow 0.3s;
     -webkit-tap-highlight-color: transparent;
 }
 

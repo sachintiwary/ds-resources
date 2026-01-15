@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { ROADMAPS } from '@/data/roadmaps';
 import { RESOURCES, Level, CategorySlug, Resource } from '@/data/resources';
 import styles from './page.module.css';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useScroll, useMotionValueEvent } from 'framer-motion';
 import { ArrowUpRight, ArrowDown, Search, Filter } from 'lucide-react';
 
 const CATEGORIES: { label: string; value: CategorySlug | 'All' }[] = [
@@ -22,6 +22,18 @@ const CATEGORIES: { label: string; value: CategorySlug | 'All' }[] = [
 export default function Home() {
     const [activeTab, setActiveTab] = useState<'vault' | 'roadmap'>('vault');
     const [openRoadmap, setOpenRoadmap] = useState<string | null>(null);
+    const [isNavVisible, setIsNavVisible] = useState(true);
+
+    const { scrollY } = useScroll();
+
+    useMotionValueEvent(scrollY, "change", (latest) => {
+        const previous = scrollY.getPrevious() || 0;
+        if (latest > previous && latest > 150) {
+            setIsNavVisible(false);
+        } else {
+            setIsNavVisible(true);
+        }
+    });
 
     // Vault Filters
     const [search, setSearch] = useState('');
@@ -52,7 +64,12 @@ export default function Home() {
     return (
         <main className={styles.main}>
             {/* --- FLOATING GLASS NAV --- */}
-            <div className={styles.navContainer}>
+            <motion.div
+                className={styles.navContainer}
+                initial={{ y: 0 }}
+                animate={{ y: isNavVisible ? 0 : -100 }}
+                transition={{ duration: 0.3, ease: 'easeInOut' }}
+            >
                 <nav className={styles.glassNav}>
                     <button
                         className={`${styles.navItem} ${activeTab === 'vault' ? styles.active : ''}`}
@@ -67,7 +84,7 @@ export default function Home() {
                         Guide
                     </button>
                 </nav>
-            </div>
+            </motion.div>
 
             {/* --- HERO SECTION --- */}
             <header className={styles.hero}>
