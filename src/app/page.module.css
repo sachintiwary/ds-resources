@@ -1,331 +1,317 @@
 .main {
     min-height: 100vh;
-    position: relative;
-    background: radial-gradient(circle at 50% 0%, #1a1b26 0%, #050505 60%);
-    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+/* --- HEADER --- */
+.header {
+    border-bottom: 1px solid var(--border-subtle);
+    padding: 1.5rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    background: rgba(8, 8, 8, 0.8);
+    backdrop-filter: blur(20px);
+    z-index: 100;
+}
+
+.logo {
+    font-weight: 700;
+    font-size: 1rem;
+    letter-spacing: -0.02em;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.logoDot {
+    width: 8px;
+    height: 8px;
+    background: #fff;
+    border-radius: 50%;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+.nav {
+    display: flex;
+    gap: 4px;
+    background: var(--bg-surface);
+    padding: 4px;
+    border-radius: 8px;
+    border: 1px solid var(--border-subtle);
+}
+
+.navBtn {
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    padding: 0.5rem 1rem;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+}
+
+.navBtn:hover {
+    color: var(--text-primary);
+}
+
+.navBtn.active {
+    background: #222;
     color: #fff;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 
-.content {
-    position: relative;
-    z-index: 10;
-    padding: 0 5vw 10rem;
-    max-width: 1600px;
-    margin: 0 auto;
-}
-
-/* === SHARED HERO === */
+/* --- HERO --- */
 .hero {
-    padding: 6rem var(--page-padding) 4rem;
-    max-width: 1400px;
-    margin: 0 auto;
+    padding: 8rem 2rem;
     text-align: center;
+    border-bottom: 1px solid var(--border-subtle);
+    background:
+        linear-gradient(to bottom, transparent 50%, var(--bg-deep) 100%),
+        linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    background-size: 100% 100%, 40px 40px, 40px 40px;
 }
 
 .titleMain {
-    font-size: clamp(3rem, 7vw, 7rem);
+    font-size: clamp(3rem, 6vw, 5rem);
     font-weight: 800;
     letter-spacing: -0.04em;
-    line-height: 0.95;
-    margin-bottom: 2rem;
-    background: linear-gradient(to bottom, #fff, #999);
-    -webkit-background-clip: text;
-    color: transparent;
-    text-shadow: 0 0 30px rgba(188, 19, 254, 0.2);
-}
-
-.titleHighlight {
-    background: linear-gradient(135deg, #60a5fa, #c084fc);
+    line-height: 1;
+    margin-bottom: 1.5rem;
+    background: linear-gradient(180deg, #fff 0%, #666 100%);
     -webkit-background-clip: text;
     color: transparent;
 }
 
-
-/* === TAB NAVIGATION === */
-.controls {
-    display: flex;
-    justify-content: center;
-    gap: 2rem;
-    margin: 3rem 0;
-    align-items: center;
-    flex-wrap: wrap;
+.heroDesc {
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+    max-width: 500px;
+    margin: 0 auto;
+    line-height: 1.5;
 }
 
-.tabs {
-    display: flex;
-    background: rgba(255, 255, 255, 0.03);
-    padding: 4px;
-    border-radius: 12px;
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    backdrop-filter: blur(10px);
-}
-
-.tab {
-    padding: 0.8rem 1.5rem;
-    border-radius: 8px;
-    font-size: 1rem;
-    font-weight: 600;
-    color: #8892b0;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    background: transparent;
-    border: none;
-}
-
-.tab.active {
-    background: rgba(255, 255, 255, 0.1);
-    color: #fff;
-    box-shadow: 0 0 15px rgba(255, 255, 255, 0.05);
-}
-
-
-/* === VIEW 1: ROADMAPS === */
-.roadmapGrid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 2rem;
-    margin-bottom: 4rem;
-    margin-top: 2rem;
-}
-
-.roadmapCard {
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-    border-radius: 20px;
-    padding: 2rem;
-    cursor: pointer;
-    transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
-    position: relative;
-    overflow: hidden;
-}
-
-.roadmapCard:hover {
-    transform: translateY(-10px) scale(1.02);
-    border-color: var(--card-color);
-    box-shadow: 0 10px 40px -10px var(--card-color);
-}
-
-.roadmapCard::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
+/* --- ROADMAPS (Accordion Style) --- */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 4rem 2rem;
     width: 100%;
-    height: 100%;
-    background: linear-gradient(180deg, transparent 0%, var(--card-color) 100%);
-    opacity: 0;
-    transition: 0.5s;
-    z-index: -1;
 }
 
-.roadmapCard:hover::before {
-    opacity: 0.1;
-}
-
-.roleIcon {
-    font-size: 3rem;
-    margin-bottom: 1rem;
-}
-
-.roleTitle {
-    font-size: 2rem;
-    font-weight: 800;
-    margin-bottom: 1rem;
-}
-
-.roleDesc {
-    color: #aaa;
-    line-height: 1.6;
-}
-
-/* TIMELINE */
-.timeline {
-    margin-top: 5rem;
-    position: relative;
-    border-left: 2px solid rgba(255, 255, 255, 0.1);
-    padding-left: 2rem;
-    animation: fadeIn 0.5s ease-out;
-}
-
-.phase {
-    margin-bottom: 4rem;
-    position: relative;
-}
-
-.phase::before {
-    content: '';
-    position: absolute;
-    left: -2.6rem;
-    top: 0;
-    width: 1rem;
-    height: 1rem;
-    background: var(--phase-color);
-    border-radius: 50%;
-    box-shadow: 0 0 20px var(--phase-color);
-}
-
-.phaseTitle {
-    font-size: 1.8rem;
-    font-weight: 700;
-    color: var(--phase-color);
-    margin-bottom: 0.5rem;
-    text-transform: uppercase;
-}
-
-.resourceGridSmall {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 1.5rem;
-    margin-top: 1.5rem;
-}
-
-.resourceCardSmall {
-    background: #000;
-    border: 1px solid #333;
-    padding: 1.5rem;
+.roadmapList {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    background: var(--border-subtle);
+    /* Borders via gap */
+    border: 1px solid var(--border-subtle);
     border-radius: 12px;
-    transition: 0.3s;
-    text-decoration: none;
-    display: block;
-    position: relative;
     overflow: hidden;
 }
 
-.resourceCardSmall:hover {
-    border-color: #fff;
-    transform: translateX(5px);
+.roadmapRow {
+    background: var(--bg-deep);
+    transition: background 0.2s;
 }
 
-.resourceType {
-    font-size: 0.7rem;
+.roadmapHeader {
+    padding: 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    user-select: none;
+}
+
+.roadmapHeader:hover {
+    background: var(--bg-surface);
+}
+
+.rowLeft h2 {
+    font-size: 1.5rem;
+    margin-bottom: 0.25rem;
+    letter-spacing: -0.02em;
+}
+
+.rowLeft p {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+.roadmapContent {
+    border-top: 1px solid var(--border-subtle);
+    background: var(--bg-surface);
+    overflow: hidden;
+}
+
+.phaseList {
+    padding: 2rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+}
+
+.phase h3 {
+    font-size: 0.9rem;
     text-transform: uppercase;
-    color: #666;
-    margin-bottom: 0.5rem;
-    letter-spacing: 1px;
+    color: var(--text-secondary);
+    margin-bottom: 1rem;
+    letter-spacing: 0.05em;
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
+.phase h3::before {
+    content: '';
+    display: block;
+    width: 6px;
+    height: 6px;
+    background: currentColor;
+    border-radius: 50%;
+}
 
+.resLink {
+    display: block;
+    padding: 1rem;
+    background: var(--bg-deep);
+    border: 1px solid var(--border-subtle);
+    border-radius: 8px;
+    margin-bottom: 0.75rem;
+    text-decoration: none;
+    transition: all 0.2s var(--ease);
+}
 
-/* === VIEW 2: LIBRARY (Bento Grid) === */
+.resLink:hover {
+    border-color: #666;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.resTitle {
+    color: var(--text-primary);
+    font-weight: 500;
+    font-size: 0.95rem;
+}
+
+.resMeta {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 4px;
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+}
+
+/* --- LIBRARY GRID --- */
+.filterBar {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 2rem;
+    overflow-x: auto;
+    padding-bottom: 4px;
+}
+
+.filterBtn {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-secondary);
+    padding: 0.4rem 1rem;
+    border-radius: 100px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: 0.2s;
+    white-space: nowrap;
+}
+
+.filterBtn:hover {
+    border-color: #666;
+    color: #fff;
+}
+
+.filterBtn.active {
+    background: #fff;
+    color: #000;
+    border-color: #fff;
+}
 
 .grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
-    gap: 24px;
-    padding: 2rem var(--page-padding);
-    max-width: 1400px;
-    margin: 0 auto;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
 }
 
 .card {
-    position: relative;
-    background: linear-gradient(180deg, rgba(20, 20, 30, 0.6) 0%, rgba(10, 10, 15, 0.4) 100%);
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    border-radius: 20px;
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: 12px;
     padding: 24px;
-    height: 280px;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    overflow: hidden;
-    transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
-    cursor: pointer;
+    height: 240px;
+    text-decoration: none;
+    transition: all 0.3s var(--ease);
+    position: relative;
 }
 
 .card:hover {
-    transform: translateY(-8px);
-    border-color: rgba(255, 255, 255, 0.15);
-    background: linear-gradient(180deg, rgba(30, 30, 45, 0.7) 0%, rgba(15, 15, 20, 0.5) 100%);
+    border-color: #555;
+    background: #161616;
+    transform: translateY(-4px);
 }
 
-.spotlight {
-    pointer-events: none;
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: radial-gradient(600px circle at var(--x) var(--y), rgba(255, 255, 255, 0.06), transparent 40%);
-    z-index: 1;
-}
-
-.cardContent {
-    position: relative;
-    z-index: 2;
-}
-
-.cardTop {
+.cardIcon {
+    width: 40px;
+    height: 40px;
+    background: var(--bg-deep);
+    border: 1px solid var(--border-subtle);
+    border-radius: 8px;
     display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
+    align-items: center;
+    justify-content: center;
     margin-bottom: 1rem;
-}
-
-.levelBadge {
-    font-size: 0.7rem;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    font-weight: 600;
-    padding: 4px 8px;
-    border-radius: 4px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.levelNovice {
-    color: #4ade80;
-    border-color: rgba(74, 222, 128, 0.2);
-}
-
-.levelIntermediate {
-    color: #60a5fa;
-    border-color: rgba(96, 165, 250, 0.2);
-}
-
-.levelAdvanced {
-    color: #c084fc;
-    border-color: rgba(192, 132, 252, 0.2);
-}
-
-.levelExpert {
-    color: #f472b6;
-    border-color: rgba(244, 114, 182, 0.2);
+    color: #fff;
+    font-size: 1.2rem;
 }
 
 .cardTitle {
-    font-size: 1.25rem;
+    font-size: 1.1rem;
     font-weight: 600;
-    line-height: 1.3;
     color: #fff;
-    margin-bottom: 0.75rem;
+    margin-bottom: 0.5rem;
 }
 
 .cardDesc {
-    font-size: 0.95rem;
-    color: #94a3b8;
-    line-height: 1.6;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    flex-grow: 1;
+    /* trim logic handled in JS or line-clamp */
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
-.cardTags {
+.cardFooter {
+    border-top: 1px solid var(--border-subtle);
+    padding-top: 1rem;
+    margin-top: 1rem;
     display: flex;
-    gap: 8px;
-    margin-top: auto;
+    justify-content: space-between;
+    align-items: center;
 }
 
-.tag {
-    font-size: 0.75rem;
-    color: #64748b;
-    background: rgba(255, 255, 255, 0.03);
-    padding: 4px 8px;
-    border-radius: 6px;
-}
-
-@media (max-width: 600px) {
-    .titleMain {
-        font-size: 3.5rem;
-    }
-
-    .grid {
-        grid-template-columns: 1fr;
-    }
+.cardTag {
+    font-size: 0.7rem;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border: 1px solid #333;
+    padding: 2px 6px;
+    border-radius: 4px;
 }
