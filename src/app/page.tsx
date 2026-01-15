@@ -1,118 +1,97 @@
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import ResourceCard from '@/components/ResourceCard';
 import ResourceGrid from '@/components/ResourceGrid';
-import { prisma } from '@/lib/prisma';
 import styles from './page.module.css';
 import Link from 'next/link';
-import { redirect } from 'next/navigation';
+import { RESOURCES, CATEGORIES } from '@/data/resources';
 
 export const dynamic = 'force-dynamic';
 
-async function getResources(category?: string, search?: string) {
-  try {
-    const where: any = {};
-    if (category) where.category = { slug: category };
-    if (search) {
-      where.OR = [
-        { title: { contains: search } },
-        { description: { contains: search } },
-      ];
-    }
-
-    const resources = await prisma.resource.findMany({
-      where,
-      include: {
-        category: true,
-        tags: true,
-      },
-      orderBy: {
-        createdAt: 'desc',
-      },
-    });
-    return resources;
-  } catch (error) {
-    console.error('Failed to fetch resources:', error);
-    return [];
-  }
-}
-
-async function getCategories() {
-  try {
-    return await prisma.category.findMany();
-  } catch (e) {
-    return [];
-  }
-}
-
-async function searchAction(formData: FormData) {
-  'use server';
-  const query = formData.get('query');
-  redirect(`/?search=${query}`);
-}
-
 export default async function Home({
-  searchParams
+  searchParams,
 }: {
-  searchParams: Promise<{ category?: string; search?: string }> | { category?: string; search?: string }
+  searchParams: Promise<{ category?: string; search?: string }> | { category?: string; search?: string };
 }) {
   const resolvedSearchParams = await searchParams;
-  const category = resolvedSearchParams.category;
-  const search = resolvedSearchParams.search;
+  const categorySlug = resolvedSearchParams?.category || 'all';
+  const calculateSearch = resolvedSearchParams?.search || '';
 
-  const resources = await getResources(category, search);
-  const categories = await getCategories();
+  let filteredResources = [...RESOURCES];
+
+  if (categorySlug !== 'all') {
+    filteredResources = filteredResources.filter(r => r.category.slug === categorySlug);
+  }
+
+  if (calculateSearch) {
+    const searchLower = calculateSearch.toLowerCase();
+    filteredResources = filteredResources.filter(r =>
+      r.title.toLowerCase().includes(searchLower) ||
+      r.description.toLowerCase().includes(searchLower)
+    );
+  }
+
+  // Sort by Newest (simulated by ID logic or just existing order)
+  filteredResources.sort((a, b) => b.id - a.id);
 
   return (
-    <div className={styles.page}>
+    <main className={styles.main}>
       <Header />
-      <main className={styles.main}>
-        <section className={styles.hero}>
-          <h1 className={styles.title}>Data Science & ML Resources</h1>
-          <p className={styles.subtitle}>
-            A curated collection of the best tools, libraries, and learning materials.
-          </p>
 
-          <div className={styles.filters}>
-            <form action={searchAction} className={styles.searchForm}>
-              <input
-                name="query"
-                type="text"
-                placeholder="Search resources..."
-                defaultValue={search || ''}
-                className={styles.searchInput}
-              />
-            </form>
-            <div className={styles.categoryList}>
-              <Link href="/" className={`${styles.categoryTag} ${!category ? styles.active : ''}`}>All</Link>
-              {categories.map(c => (
-                <Link
-                  key={c.id}
-                  href={`/?category=${c.slug}`}
-                  className={`${styles.categoryTag} ${category === c.slug ? styles.active : ''}`}
-                >
-                  {c.name}
-                </Link>
-              ))}
-            </div>
-          </div>
-        </section>
+      <section className={styles.hero}>
+        <h1 className={styles.title}>Data Science & ML Resources</h1>
+        <p className={styles.subtitle}>
+          A curated collection of the best tools, libraries, and learning materials.
+        </p>
 
-        <section className={styles.content}>
-          {resources.length === 0 ? (
-            <div className={styles.empty}>
-              <p>No resources found.{search && ` Try searching for something else.`}</p>
-            </div>
-          ) : (
-            <ResourceGrid>
-              {resources.map((resource) => (
-                <ResourceCard key={resource.id} resource={resource} />
-              ))}
-            </ResourceGrid>
-          )}
-        </section>
-      </main>
+        <form className={styles.searchForm} action={async (formData) => {
+          "use server";
+          const query = formData.get('search')?.toString();
+          const cat = categorySlug;
+          let url = '/';
+          if (cat && cat !== 'all') url += `?category=${cat}`;
+          if (query) url += `${url.includes('?') ? '&' : '?'}search=${query}`;
+          else if (cat === 'all') url = '/';
+
+          const { redirect } = await import('next/navigation');
+          redirect(url);
+        }}>
+          <input
+            type="text"
+            name="search"
+            placeholder="Search resources..."
+            className={styles.searchInput}
+            defaultValue={calculateSearch}
+          />
+        </form>
+
+        <div className={styles.categories}>
+          <Link
+            href="/"
+            className={`${styles.categoryChip} ${categorySlug === 'all' ? styles.active : ''}`}
+          >
+            All
+          </Link>
+          {CATEGORIES.map((cat) => (
+            <Link
+              key={cat.id}
+              href={`/?category=${cat.slug}${calculateSearch ? `&search=${calculateSearch}` : ''}`}
+              className={`${styles.categoryChip} ${categorySlug === cat.slug ? styles.active : ''}`}
+            >
+              {cat.name}
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      <section className={styles.content}>
+        {filteredResources.length > 0 ? (
+          <ResourceGrid resources={filteredResources as any} />
+        ) : (
+          <div className={styles.emptyState}>No resources found.</div>
+        )}
+      </section>
+
       <Footer />
-    </div>
+    </main>
   );
 }
