@@ -37,7 +37,8 @@ export async function GET(request: Request) {
         });
         return NextResponse.json(resources);
     } catch (error) {
-        return NextResponse.json({ error: 'Failed to fetch resources' }, { status: 500 });
+        console.error('Database connection error in /api/resources:', error);
+        return NextResponse.json([]);
     }
 }
 

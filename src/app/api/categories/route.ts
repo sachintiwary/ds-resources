@@ -8,6 +8,7 @@ export async function GET() {
         const categories = await prisma.category.findMany();
         return NextResponse.json(categories);
     } catch (error) {
-        return NextResponse.json({ error: 'Failed to fetch categories' }, { status: 500 });
+        console.error('Database connection error in /api/categories:', error);
+        return NextResponse.json([]);
     }
 }
