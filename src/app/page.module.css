@@ -58,11 +58,51 @@
     animation: fadeIn 0.5s ease-out;
 }
 
+/* SEARCH BAR WITH ROTATING GLOW */
 .searchBar {
     position: relative;
     max-width: 600px;
     margin: 0 auto 2rem;
     width: 100%;
+    border-radius: 20px;
+    overflow: hidden;
+    /* Contain the rotating glow */
+    padding: 1px;
+    /* The border width */
+}
+
+/* Rotating Glow */
+.searchBar::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: conic-gradient(from 0deg,
+            transparent 0deg,
+            transparent 90deg,
+            rgba(255, 255, 255, 0.8) 180deg,
+            transparent 270deg);
+    animation: rotateSearch 4s linear infinite;
+    z-index: 0;
+}
+
+@keyframes rotateSearch {
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* Inner Mask */
+.searchBar::after {
+    content: '';
+    position: absolute;
+    inset: 1px;
+    background: #050505;
+    /* Match page bg approx or slightly lighter */
+    border-radius: 19px;
+    z-index: 0;
 }
 
 .searchIcon {
@@ -72,28 +112,36 @@
     transform: translateY(-50%);
     color: var(--text-secondary);
     pointer-events: none;
-    z-index: 5;
+    z-index: 2;
+    /* Layer above mask */
 }
 
 .searchInput {
+    position: relative;
+    z-index: 2;
+    /* Layer above mask */
     width: 100%;
     background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    /* Slight tint on top */
+    border: none;
+    /* Border handled by container padding */
     border-radius: 20px;
     padding: 1rem 1rem 1rem 3rem;
     color: #fff;
     font-size: 1rem;
     font-family: inherit;
     transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
 }
 
 .searchInput:focus {
     outline: none;
     background: rgba(255, 255, 255, 0.1);
-    border-color: rgba(255, 255, 255, 0.4);
-    box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.05);
 }
 
+
+/* FILTERS WITH PERIODIC SHINE */
 .filterRow {
     display: flex;
     justify-content: center;
@@ -103,6 +151,9 @@
 }
 
 .filterChip {
+    position: relative;
+    overflow: hidden;
+    /* For shine */
     background: rgba(255, 255, 255, 0.03);
     border: 1px solid rgba(255, 255, 255, 0.1);
     color: var(--text-secondary);
@@ -113,6 +164,31 @@
     transition: all 0.2s;
     white-space: nowrap;
 }
+
+/* Periodic Shine Animation */
+.filterChip::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg,
+            transparent,
+            rgba(255, 255, 255, 0.2),
+            transparent);
+    animation: periodicShine 6s infinite;
+}
+
+/* Randomize delays slightly for natural feel - strictly CSS only allows nth-child targeting */
+.filterChip:nth-child(2n)::after {
+    animation-delay: 2s;
+}
+
+.filterChip:nth-child(3n)::after {
+    animation-delay: 4s;
+}
+
 
 .filterChip:active {
     transform: scale(0.95);
@@ -125,7 +201,25 @@
     font-weight: 600;
 }
 
-/* --- CARDS --- */
+@keyframes periodicShine {
+    0% {
+        left: -100%;
+    }
+
+    10% {
+        left: 100%;
+    }
+
+    /* Fast shine */
+    100% {
+        left: 100%;
+    }
+
+    /* Long pause */
+}
+
+
+/* --- CARDS WITH SHINE --- */
 .cardBase {
     background: rgba(255, 255, 255, 0.03);
     border: 1px solid rgba(255, 255, 255, 0.1);
@@ -133,6 +227,41 @@
     overflow: hidden;
     position: relative;
     transition: all 0.3s;
+}
+
+/* Periodic Shine on Cards */
+.cardBase::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -150%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(110deg,
+            transparent 20%,
+            rgba(255, 255, 255, 0.1) 40%,
+            rgba(255, 255, 255, 0.1) 60%,
+            transparent 80%);
+    animation: periodicCardShine 8s infinite;
+    pointer-events: none;
+    z-index: 3;
+}
+
+@keyframes periodicCardShine {
+    0% {
+        transform: translateX(0);
+    }
+
+    10% {
+        transform: translateX(250%);
+    }
+
+    /* Fast sweep */
+    100% {
+        transform: translateX(250%);
+    }
+
+    /* Long pause */
 }
 
 /* EDGE LIGHT ON CARDS (Subtler version of nav) */

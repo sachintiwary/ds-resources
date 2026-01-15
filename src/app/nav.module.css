@@ -13,13 +13,10 @@
     position: absolute;
     display: block;
     background: #fff;
-    /* The light color */
     box-shadow: 0 0 10px #fff, 0 0 20px #fff;
-    /* Glow */
     opacity: 0;
 }
 
-/* TOP BORDER */
 .screenFrame span:nth-child(1) {
     top: 0;
     left: 0;
@@ -28,7 +25,6 @@
     background: linear-gradient(90deg, transparent, #fff);
     animation: snakeTop 4s linear infinite;
     opacity: 1;
-    /* Gradient handles fading */
 }
 
 @keyframes snakeTop {
@@ -42,7 +38,6 @@
     }
 }
 
-/* RIGHT BORDER */
 .screenFrame span:nth-child(2) {
     top: -100%;
     right: 0;
@@ -51,7 +46,6 @@
     background: linear-gradient(180deg, transparent, #fff);
     animation: snakeRight 4s linear infinite;
     animation-delay: 1s;
-    /* 4s / 4 sides = 1s delay */
 }
 
 @keyframes snakeRight {
@@ -65,7 +59,6 @@
     }
 }
 
-/* BOTTOM BORDER */
 .screenFrame span:nth-child(3) {
     bottom: 0;
     right: -100%;
@@ -87,7 +80,6 @@
     }
 }
 
-/* LEFT BORDER */
 .screenFrame span:nth-child(4) {
     bottom: -100%;
     left: 0;
@@ -109,8 +101,7 @@
     }
 }
 
-
-/* GOD RAYS / REFRACTION */
+/* GOD RAYS */
 .refractionOverlay {
     position: fixed;
     top: 0;
@@ -119,8 +110,7 @@
     height: 100vh;
     z-index: 1;
     pointer-events: none;
-    background:
-        radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.03), transparent 40%),
+    background: radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.03), transparent 40%),
         radial-gradient(circle at 0% 50%, rgba(255, 255, 255, 0.02), transparent 30%);
     mix-blend-mode: overlay;
     animation: pulseLight 8s ease-in-out infinite alternate;
@@ -157,14 +147,46 @@
     padding: 4px;
     width: 240px;
     height: 48px;
+
+    /* Base Glass */
     background: rgba(40, 40, 40, 0.3);
     backdrop-filter: blur(25px) saturate(180%);
     -webkit-backdrop-filter: blur(25px) saturate(180%);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-top: 1px solid rgba(255, 255, 255, 0.15);
     border-radius: 100px;
     box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
     overflow: hidden;
+}
+
+/* ROTATING BORDER FOR MENU */
+.glassNav::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: conic-gradient(transparent,
+            rgba(255, 255, 255, 0.6),
+            transparent 30%);
+    animation: rotateBorder 4s linear infinite;
+    z-index: 0;
+}
+
+.glassNav::after {
+    content: '';
+    position: absolute;
+    inset: 1px;
+    /* Border width */
+    background: rgba(40, 40, 40, 0.8);
+    /* Inner background matches pill */
+    border-radius: 100px;
+    z-index: 0;
+}
+
+@keyframes rotateBorder {
+    100% {
+        transform: rotate(360deg);
+    }
 }
 
 .navBackgroundContainer {
@@ -173,7 +195,8 @@
     bottom: 4px;
     left: 4px;
     right: 4px;
-    z-index: 0;
+    z-index: 1;
+    /* Above the border mask */
 }
 
 .activePill {
@@ -190,6 +213,7 @@
 .navItem {
     flex: 1;
     z-index: 2;
+    /* Above everything */
     background: transparent;
     border: none;
     cursor: pointer;
