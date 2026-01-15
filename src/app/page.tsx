@@ -1,11 +1,12 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { ROADMAPS } from '@/data/roadmaps';
-import { RESOURCES, Level, CategorySlug, Resource } from '@/data/resources';
+import { RESOURCES, CategorySlug } from '@/data/resources';
 import styles from './page.module.css';
+import navStyles from './nav.module.css';
 import { motion, AnimatePresence, useScroll, useMotionValueEvent } from 'framer-motion';
-import { ArrowUpRight, ArrowDown, Search, Filter } from 'lucide-react';
+import { ArrowUpRight, ArrowDown, Search } from 'lucide-react';
 
 const CATEGORIES: { label: string; value: CategorySlug | 'All' }[] = [
     { label: 'All', value: 'All' },
@@ -23,6 +24,7 @@ export default function Home() {
     const [activeTab, setActiveTab] = useState<'vault' | 'roadmap'>('vault');
     const [openRoadmap, setOpenRoadmap] = useState<string | null>(null);
     const [isNavVisible, setIsNavVisible] = useState(true);
+    const navRef = useRef<HTMLDivElement>(null);
 
     const { scrollY } = useScroll();
 
@@ -34,6 +36,14 @@ export default function Home() {
             setIsNavVisible(true);
         }
     });
+
+    // Handle Shining Beam Effect on Nav
+    const handleNavMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+        if (!navRef.current) return;
+        const rect = navRef.current.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        navRef.current.style.setProperty('--x', `${x}px`);
+    };
 
     // Vault Filters
     const [search, setSearch] = useState('');
@@ -63,27 +73,33 @@ export default function Home() {
 
     return (
         <main className={styles.main}>
-            {/* --- FLOATING GLASS NAV --- */}
+            {/* --- FLOATING NAV WITH MOVING EDGE LIGHT --- */}
             <motion.div
-                className={styles.navContainer}
+                className={navStyles.navContainer}
                 initial={{ y: 0 }}
-                animate={{ y: isNavVisible ? 0 : -100 }}
-                transition={{ duration: 0.3, ease: 'easeInOut' }}
+                animate={{ y: isNavVisible ? 0 : -120 }}
+                transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
             >
-                <nav className={styles.glassNav}>
+                <div
+                    className={navStyles.glassNav}
+                    ref={navRef}
+                    onMouseMove={handleNavMouseMove}
+                >
+                    <div className={navStyles.beam} /> {/* Interactive light beam */}
+
                     <button
-                        className={`${styles.navItem} ${activeTab === 'vault' ? styles.active : ''}`}
+                        className={`${navStyles.navItem} ${activeTab === 'vault' ? navStyles.active : ''}`}
                         onClick={() => setActiveTab('vault')}
                     >
                         Vault
                     </button>
                     <button
-                        className={`${styles.navItem} ${activeTab === 'roadmap' ? styles.active : ''}`}
+                        className={`${navStyles.navItem} ${activeTab === 'roadmap' ? navStyles.active : ''}`}
                         onClick={() => setActiveTab('roadmap')}
                     >
                         Guide
                     </button>
-                </nav>
+                </div>
             </motion.div>
 
             {/* --- HERO SECTION --- */}
@@ -147,30 +163,7 @@ export default function Home() {
                                 className={styles.grid}
                             >
                                 {filteredVault.map((r) => (
-                                    <motion.a
-                                        key={r.id}
-                                        href={r.url}
-                                        target="_blank"
-                                        variants={itemVars}
-                                        className={styles.libCard}
-                                        whileHover={{ scale: 1.02 }}
-                                        whileTap={{ scale: 0.98 }}
-                                    >
-                                        <div className={styles.cardGlow} />
-                                        <div className={styles.libContent}>
-                                            <div className={styles.cardHeader}>
-                                                <span className={styles.idBadge}>{r.id < 10 ? `0${r.id}` : r.id}</span>
-                                                <ArrowUpRight size={20} className={styles.arrowIcon} />
-                                            </div>
-
-                                            <h3 className={styles.libTitle}>{r.title}</h3>
-                                            <p className={styles.libDesc}>{r.description}</p>
-                                        </div>
-                                        <div className={styles.cardFooter}>
-                                            <span className={styles.pill}>{r.level}</span>
-                                            <span className={styles.pill}>{r.type}</span>
-                                        </div>
-                                    </motion.a>
+                                    <LibraryCard key={r.id} resource={r} variants={itemVars} />
                                 ))}
                             </motion.div>
                         </motion.div>
@@ -184,61 +177,112 @@ export default function Home() {
                             className={styles.roadmapList}
                         >
                             {ROADMAPS.map((rm) => (
-                                <motion.div
+                                <RoadmapCard
                                     key={rm.id}
-                                    initial={{ opacity: 0, y: 20 }}
-                                    whileInView={{ opacity: 1, y: 0 }}
-                                    viewport={{ once: true }}
-                                    className={styles.roadmapItem}
-                                >
-                                    <div
-                                        className={styles.roadmapHeader}
-                                        onClick={() => setOpenRoadmap(openRoadmap === rm.id ? null : rm.id)}
-                                    >
-                                        <div>
-                                            <h2 className={styles.roleTitle}>{rm.role}</h2>
-                                            <p className={styles.roleDesc}>{rm.description}</p>
-                                        </div>
-                                        <div className={styles.arrowWrapper}>
-                                            <motion.div animate={{ rotate: openRoadmap === rm.id ? 180 : 0 }}>
-                                                <ArrowDown size={20} />
-                                            </motion.div>
-                                        </div>
-                                    </div>
-
-                                    <AnimatePresence>
-                                        {openRoadmap === rm.id && (
-                                            <motion.div
-                                                initial={{ height: 0, opacity: 0 }}
-                                                animate={{ height: 'auto', opacity: 1 }}
-                                                exit={{ height: 0, opacity: 0 }}
-                                                className={styles.timeline}
-                                            >
-                                                {rm.phases.map((phase, i) => (
-                                                    <div key={i} className={styles.phase}>
-                                                        <h3 className={styles.phaseTitle}>{phase.title}</h3>
-                                                        <p className={styles.phaseDesc}>{phase.description}</p>
-                                                        <div className={styles.phaseResources}>
-                                                            {phase.resources.map((res, j) => (
-                                                                <a key={j} href={res.url} target="_blank" className={styles.resourceLink}>
-                                                                    <div className={styles.resRow}>
-                                                                        <span className={styles.resName}>{res.title}</span>
-                                                                        <span className={styles.resInfo}>{res.type}</span>
-                                                                    </div>
-                                                                </a>
-                                                            ))}
-                                                        </div>
-                                                    </div>
-                                                ))}
-                                            </motion.div>
-                                        )}
-                                    </AnimatePresence>
-                                </motion.div>
+                                    roadmap={rm}
+                                    isOpen={openRoadmap === rm.id}
+                                    toggle={() => setOpenRoadmap(openRoadmap === rm.id ? null : rm.id)}
+                                />
                             ))}
                         </motion.div>
                     )}
                 </AnimatePresence>
             </section>
         </main>
+    );
+}
+
+// Extracted for cleaner Mouse Move logic
+function LibraryCard({ resource, variants }: { resource: any, variants: any }) {
+    const ref = useRef<HTMLAnchorElement>(null);
+
+    const handleMove = (e: React.MouseEvent<HTMLAnchorElement>) => {
+        if (!ref.current) return;
+        const rect = ref.current.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        ref.current.style.setProperty('--x', `${x}px`);
+        ref.current.style.setProperty('--y', `${y}px`);
+    };
+
+    return (
+        <motion.a
+            ref={ref}
+            href={resource.url}
+            target="_blank"
+            variants={variants}
+            className={styles.libCard}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            onMouseMove={handleMove}
+        >
+            <div className={styles.libContent}>
+                <div className={styles.cardHeader}>
+                    <span className={styles.idBadge}>{resource.id < 10 ? `0${resource.id}` : resource.id}</span>
+                    <ArrowUpRight size={20} className={styles.arrowIcon} />
+                </div>
+
+                <h3 className={styles.libTitle}>{resource.title}</h3>
+                <p className={styles.libDesc}>{resource.description}</p>
+            </div>
+            <div className={styles.cardFooter}>
+                <span className={styles.pill}>{resource.level}</span>
+                <span className={styles.pill}>{resource.type}</span>
+            </div>
+        </motion.a>
+    );
+}
+
+function RoadmapCard({ roadmap, isOpen, toggle }: { roadmap: any, isOpen: boolean, toggle: () => void }) {
+    return (
+        <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className={styles.roadmapItem}
+        >
+            <div
+                className={styles.roadmapHeader}
+                onClick={toggle}
+            >
+                <div>
+                    <h2 className={styles.roleTitle}>{roadmap.role}</h2>
+                    <p className={styles.roleDesc}>{roadmap.description}</p>
+                </div>
+                <div className={styles.arrowWrapper}>
+                    <motion.div animate={{ rotate: isOpen ? 180 : 0 }}>
+                        <ArrowDown size={20} />
+                    </motion.div>
+                </div>
+            </div>
+
+            <AnimatePresence>
+                {isOpen && (
+                    <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: 'auto', opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        className={styles.timeline}
+                    >
+                        {roadmap.phases.map((phase: any, i: number) => (
+                            <div key={i} className={styles.phase}>
+                                <h3 className={styles.phaseTitle}>{phase.title}</h3>
+                                <p className={styles.phaseDesc}>{phase.description}</p>
+                                <div className={styles.phaseResources}>
+                                    {phase.resources.map((res: any, j: number) => (
+                                        <a key={j} href={res.url} target="_blank" className={styles.resourceLink}>
+                                            <div className={styles.resRow}>
+                                                <span className={styles.resName}>{res.title}</span>
+                                                <span className={styles.resInfo}>{res.type}</span>
+                                            </div>
+                                        </a>
+                                    ))}
+                                </div>
+                            </div>
+                        ))}
+                    </motion.div>
+                )}
+            </AnimatePresence>
+        </motion.div>
     );
 }

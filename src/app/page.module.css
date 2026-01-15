@@ -2,67 +2,6 @@
     min-height: 100vh;
     padding-bottom: 8rem;
     overflow-x: hidden;
-    /* Prevent horizontal scroll on mobile */
-}
-
-/* --- GLASS NAV --- */
-.navContainer {
-    position: fixed;
-    top: 1.5rem;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 1000;
-    width: 90%;
-    max-width: 320px;
-}
-
-.glassNav {
-    display: flex;
-    justify-content: center;
-    gap: 0.5rem;
-    padding: 0.4rem;
-
-    /* REFRACTIVE GLASS */
-    background: linear-gradient(135deg,
-            rgba(255, 255, 255, 0.1) 0%,
-            rgba(255, 255, 255, 0.01) 50%,
-            rgba(255, 255, 255, 0.05) 100%);
-    backdrop-filter: blur(24px) saturate(200%);
-    -webkit-backdrop-filter: blur(24px) saturate(200%);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    border-right: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 100px;
-    box-shadow:
-        0 8px 32px rgba(0, 0, 0, 0.3),
-        inset 0 0 0 1px rgba(255, 255, 255, 0.1);
-}
-
-.navItem {
-    flex: 1;
-    padding: 0.7rem 0;
-    border-radius: 100px;
-    border: none;
-    background: transparent;
-    color: rgba(255, 255, 255, 0.6);
-    font-size: 0.9rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
-    position: relative;
-    white-space: nowrap;
-}
-
-.navItem:active {
-    transform: scale(0.95);
-}
-
-.navItem.active {
-    background: rgba(255, 255, 255, 0.2);
-    color: #fff;
-    box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.1);
-    text-shadow: 0 0 10px rgba(255, 255, 255, 0.4);
-    font-weight: 600;
 }
 
 /* --- HERO --- */
@@ -138,26 +77,21 @@
 
 .searchInput {
     width: 100%;
-    /* REFRACTIVE INPUT */
-    background: linear-gradient(145deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.01) 100%);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    border-top: 1px solid rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 20px;
     padding: 1rem 1rem 1rem 3rem;
     color: #fff;
     font-size: 1rem;
     font-family: inherit;
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
     transition: all 0.3s ease;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
 }
 
 .searchInput:focus {
     outline: none;
-    background: linear-gradient(145deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.02) 100%);
+    background: rgba(255, 255, 255, 0.1);
     border-color: rgba(255, 255, 255, 0.4);
-    box-shadow: 0 0 30px rgba(255, 255, 255, 0.05);
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
 }
 
 .filterRow {
@@ -178,7 +112,6 @@
     cursor: pointer;
     transition: all 0.2s;
     white-space: nowrap;
-    -webkit-tap-highlight-color: transparent;
 }
 
 .filterChip:active {
@@ -186,42 +119,32 @@
 }
 
 .filterActive {
-    background: rgba(255, 255, 255, 0.9);
+    background: #fff;
     color: #000;
     border-color: #fff;
     font-weight: 600;
-    box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
 }
 
-/* --- CARDS (REFRACTIVE BASE) --- */
+/* --- CARDS --- */
 .cardBase {
-    /* REFRACTION MOCKUP */
-    background: linear-gradient(135deg,
-            rgba(255, 255, 255, 0.08) 0%,
-            rgba(255, 255, 255, 0.01) 100%);
+    background: rgba(255, 255, 255, 0.03);
     border: 1px solid rgba(255, 255, 255, 0.1);
-    border-top: 1px solid rgba(255, 255, 255, 0.25);
-    border-left: 1px solid rgba(255, 255, 255, 0.15);
-    backdrop-filter: blur(30px) saturate(120%);
-    -webkit-backdrop-filter: blur(30px) saturate(120%);
     border-radius: 24px;
     overflow: hidden;
     position: relative;
-    box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s;
 }
 
-.cardBase::after {
-    /* Diagonal shine */
+/* EDGE LIGHT ON CARDS (Subtler version of nav) */
+.cardBase::before {
     content: '';
     position: absolute;
     top: 0;
     left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(120deg,
-            transparent 30%,
-            rgba(255, 255, 255, 0.05) 45%,
-            transparent 60%);
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(800px circle at var(--x) var(--y), rgba(255, 255, 255, 0.06), transparent 40%);
+    z-index: 1;
     pointer-events: none;
 }
 
@@ -232,7 +155,6 @@
     gap: 1.5rem;
 }
 
-/* Mobile specific grid adjustment */
 @media (max-width: 600px) {
     .grid {
         grid-template-columns: 1fr;
@@ -249,12 +171,12 @@
     justify-content: space-between;
     text-decoration: none;
     color: inherit;
-    transition: transform 0.3s, box-shadow 0.3s;
-    -webkit-tap-highlight-color: transparent;
 }
 
-.libCard:active {
-    transform: scale(0.98);
+.libCard:hover {
+    transform: translateY(-5px);
+    border-color: rgba(255, 255, 255, 0.3);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
 }
 
 .libContent {
@@ -285,8 +207,7 @@
     font-size: 1.3rem;
     font-weight: 700;
     margin-bottom: 0.5rem;
-    color: rgba(255, 255, 255, 0.95);
-    line-height: 1.2;
+    color: #fff;
 }
 
 .libDesc {
@@ -338,16 +259,13 @@
     justify-content: space-between;
     align-items: center;
     cursor: pointer;
-    -webkit-tap-highlight-color: transparent;
 }
 
 .roleTitle {
     font-size: 1.8rem;
-    /* Smaller on mobile */
     font-weight: 800;
     margin-bottom: 0.5rem;
     color: #fff;
-    line-height: 1.1;
 }
 
 .roleDesc {
@@ -363,15 +281,12 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    flex-shrink: 0;
-    /* Prevent squishing */
 }
 
 .timeline {
     border-top: 1px solid rgba(255, 255, 255, 0.08);
     background: rgba(0, 0, 0, 0.15);
     padding: 0 1.5rem 2rem;
-    /* Reduced padding */
 }
 
 @media (min-width: 601px) {
@@ -432,7 +347,6 @@
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(255, 255, 255, 0.08);
     transition: background 0.2s;
-    -webkit-tap-highlight-color: transparent;
 }
 
 .resourceLink:active {
@@ -441,8 +355,8 @@
 
 .resRow {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    justifyContent: space-between;
+    alignItems: center;
 }
 
 .resName {
