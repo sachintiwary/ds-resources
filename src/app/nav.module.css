@@ -1,4 +1,4 @@
-/* --- GLOBAL SCREEN FRAME (Silver Edge) --- */
+/* --- GLOBAL SCREEN FRAME (Snake Border) --- */
 .screenFrame {
     position: fixed;
     top: 0;
@@ -7,42 +7,110 @@
     bottom: 0;
     z-index: 9000;
     pointer-events: none;
-    /* Pass through clicks */
-    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
-    /* Subtle inner rim */
 }
 
-/* MOVING SILVER LIGHT BEAM AROUND SCREEN EDGE */
-/* MOVING SILVER LIGHT BEAM AROUND SCREEN EDGE */
-.screenFrame::before {
-    content: '';
+.screenFrame span {
     position: absolute;
-    inset: 0;
-    /* Fit exactly to the fixed container */
-    padding: 3px;
-    /* Thicker beam */
-
-    background: conic-gradient(from 0deg,
-            transparent 0deg,
-            transparent 320deg,
-            rgba(255, 255, 255, 1) 360deg);
-    animation: rotateFrame 4s linear infinite;
-    /* Faster rotation */
-
-    /* Standard Masking for Border */
-    -webkit-mask:
-        linear-gradient(#fff 0 0) content-box,
-        linear-gradient(#fff 0 0);
-    mask:
-        linear-gradient(#fff 0 0) content-box,
-        linear-gradient(#fff 0 0);
-    -webkit-mask-composite: xor;
-    mask-composite: exclude;
-
-    pointer-events: none;
+    display: block;
+    background: #fff;
+    /* The light color */
+    box-shadow: 0 0 10px #fff, 0 0 20px #fff;
+    /* Glow */
+    opacity: 0;
 }
 
-/* GOD RAYS / REFRACTION (Interacting with glass) */
+/* TOP BORDER */
+.screenFrame span:nth-child(1) {
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #fff);
+    animation: snakeTop 4s linear infinite;
+    opacity: 1;
+    /* Gradient handles fading */
+}
+
+@keyframes snakeTop {
+    0% {
+        left: -100%;
+    }
+
+    50%,
+    100% {
+        left: 100%;
+    }
+}
+
+/* RIGHT BORDER */
+.screenFrame span:nth-child(2) {
+    top: -100%;
+    right: 0;
+    width: 2px;
+    height: 100%;
+    background: linear-gradient(180deg, transparent, #fff);
+    animation: snakeRight 4s linear infinite;
+    animation-delay: 1s;
+    /* 4s / 4 sides = 1s delay */
+}
+
+@keyframes snakeRight {
+    0% {
+        top: -100%;
+    }
+
+    50%,
+    100% {
+        top: 100%;
+    }
+}
+
+/* BOTTOM BORDER */
+.screenFrame span:nth-child(3) {
+    bottom: 0;
+    right: -100%;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(270deg, transparent, #fff);
+    animation: snakeBottom 4s linear infinite;
+    animation-delay: 2s;
+}
+
+@keyframes snakeBottom {
+    0% {
+        right: -100%;
+    }
+
+    50%,
+    100% {
+        right: 100%;
+    }
+}
+
+/* LEFT BORDER */
+.screenFrame span:nth-child(4) {
+    bottom: -100%;
+    left: 0;
+    width: 2px;
+    height: 100%;
+    background: linear-gradient(360deg, transparent, #fff);
+    animation: snakeLeft 4s linear infinite;
+    animation-delay: 3s;
+}
+
+@keyframes snakeLeft {
+    0% {
+        bottom: -100%;
+    }
+
+    50%,
+    100% {
+        bottom: 100%;
+    }
+}
+
+
+/* GOD RAYS / REFRACTION */
 .refractionOverlay {
     position: fixed;
     top: 0;
@@ -50,23 +118,12 @@
     width: 100vw;
     height: 100vh;
     z-index: 1;
-    /* Behind text, above background */
     pointer-events: none;
     background:
         radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.03), transparent 40%),
         radial-gradient(circle at 0% 50%, rgba(255, 255, 255, 0.02), transparent 30%);
     mix-blend-mode: overlay;
     animation: pulseLight 8s ease-in-out infinite alternate;
-}
-
-@keyframes rotateFrame {
-    from {
-        transform: rotate(0deg);
-    }
-
-    to {
-        transform: rotate(360deg);
-    }
 }
 
 @keyframes pulseLight {
@@ -81,47 +138,35 @@
     }
 }
 
-/* --- NAV POSITIONING FIX --- */
+/* --- NAV POSITIONING --- */
 .navContainer {
     position: fixed;
     top: 2rem;
     left: 0;
     width: 100%;
-    /* Spans full width */
     display: flex;
     justify-content: center;
-    /* Flex centering is robust */
     z-index: 9999;
     pointer-events: none;
-    /* Let clicks pass through the full-width strip */
 }
 
 .glassNav {
     pointer-events: auto;
-    /* Re-enable clicks on the button itself */
     display: flex;
     position: relative;
-    /* justify-content: center; REMOVED to align with pill */
     padding: 4px;
     width: 240px;
-    /* Fixed width for pill calculation */
     height: 48px;
-
-    /* FROZEN GLASS RESTORED */
     background: rgba(40, 40, 40, 0.3);
     backdrop-filter: blur(25px) saturate(180%);
     -webkit-backdrop-filter: blur(25px) saturate(180%);
-
     border: 1px solid rgba(255, 255, 255, 0.08);
     border-top: 1px solid rgba(255, 255, 255, 0.15);
     border-radius: 100px;
     box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
-
     overflow: hidden;
-    /* For pill containment */
 }
 
-/* SLIDING PILL CONTAINER */
 .navBackgroundContainer {
     position: absolute;
     top: 4px;
@@ -137,16 +182,13 @@
     left: 0;
     bottom: 0;
     width: 50%;
-    /* Half of the container */
     background: rgba(255, 255, 255, 0.1);
     border-radius: 100px;
     box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05);
-    /* Subtle rim */
 }
 
 .navItem {
     flex: 1;
-    /* Split width evenly */
     z-index: 2;
     background: transparent;
     border: none;
@@ -162,7 +204,6 @@
     color: #fff;
 }
 
-/* Active state handled by pill, just text color here */
 .navItem.active {
     color: #fff;
     text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);

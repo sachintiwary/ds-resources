@@ -68,7 +68,12 @@ export default function Home() {
     return (
         <main className={styles.main}>
             {/* SCREEN EDGE EFFECTS */}
-            <div className={navStyles.screenFrame} />
+            <div className={navStyles.screenFrame}>
+                <span />
+                <span />
+                <span />
+                <span />
+            </div>
             <div className={navStyles.refractionOverlay} />
 
             {/* --- FLOATING NAV --- */}
