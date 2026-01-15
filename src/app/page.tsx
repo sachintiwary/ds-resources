@@ -22,7 +22,7 @@ export default function Home() {
 
     const itemVars = {
         hidden: { opacity: 0, y: 30 },
-        show: { opacity: 1, y: 0, transition: { type: 'spring', stiffness: 50 } }
+        show: { opacity: 1, y: 0 }
     };
 
     return (
