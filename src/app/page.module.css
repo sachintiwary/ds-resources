@@ -72,24 +72,33 @@
 }
 
 /* Rotating Glow */
+/* Rotating Glow */
 .searchBar::before {
     content: '';
     position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
+    /* Large overlap */
+    top: -150%;
+    left: -150%;
+    width: 400%;
+    height: 400%;
     background: conic-gradient(from 0deg,
             transparent 0deg,
-            transparent 90deg,
+            transparent 80deg,
             rgba(255, 255, 255, 0.8) 180deg,
-            transparent 270deg);
-    animation: rotateSearch 4s linear infinite;
+            transparent 280deg,
+            transparent 360deg);
+    animation: rotateSearch 5s linear infinite;
     z-index: 0;
+    filter: blur(15px);
+    /* Strong blur for seamless glow */
 }
 
 @keyframes rotateSearch {
-    100% {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
         transform: rotate(360deg);
     }
 }
