@@ -1,0 +1,164 @@
+.main {
+    min-height: 100vh;
+    position: relative;
+    color: #fff;
+    overflow-x: hidden;
+}
+
+.content {
+    position: relative;
+    z-index: 10;
+    padding: 0 5vw 10rem;
+    max-width: 1600px;
+    margin: 0 auto;
+}
+
+.hero {
+    height: 60vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.glitchTitle {
+    font-size: clamp(3rem, 8vw, 8rem);
+    font-weight: 900;
+    text-transform: uppercase;
+    line-height: 0.9;
+    position: relative;
+    color: #fff;
+    text-shadow: 0 0 30px rgba(188, 19, 254, 0.5);
+    margin-bottom: 2rem;
+}
+
+/* ROADMAP CARDS */
+.roadmapGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-bottom: 4rem;
+}
+
+.roadmapCard {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 2rem;
+    cursor: pointer;
+    transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.roadmapCard:hover {
+    transform: translateY(-10px) scale(1.02);
+    border-color: var(--card-color);
+    box-shadow: 0 10px 40px -10px var(--card-color);
+}
+
+.roadmapCard::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(180deg, transparent 0%, var(--card-color) 100%);
+    opacity: 0;
+    transition: 0.5s;
+    z-index: -1;
+}
+
+.roadmapCard:hover::before {
+    opacity: 0.1;
+}
+
+.roleIcon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.roleTitle {
+    font-size: 2rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+}
+
+.roleDesc {
+    color: #aaa;
+    line-height: 1.6;
+}
+
+/* TIMELINE */
+.timeline {
+    margin-top: 5rem;
+    position: relative;
+    border-left: 2px solid rgba(255, 255, 255, 0.1);
+    padding-left: 2rem;
+}
+
+.phase {
+    margin-bottom: 4rem;
+    position: relative;
+}
+
+.phase::before {
+    content: '';
+    position: absolute;
+    left: -2.6rem;
+    top: 0;
+    width: 1rem;
+    height: 1rem;
+    background: var(--phase-color);
+    border-radius: 50%;
+    box-shadow: 0 0 20px var(--phase-color);
+}
+
+.phaseTitle {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--phase-color);
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+}
+
+.resourceGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+}
+
+.resourceCard {
+    background: #000;
+    border: 1px solid #333;
+    padding: 1.5rem;
+    border-radius: 12px;
+    transition: 0.3s;
+    text-decoration: none;
+    display: block;
+    position: relative;
+    overflow: hidden;
+}
+
+.resourceCard:hover {
+    border-color: #fff;
+    transform: translateX(10px);
+}
+
+.resourceType {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    color: #666;
+    margin-bottom: 0.5rem;
+    letter-spacing: 1px;
+}
+
+.resourceTitle {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #fff;
+}
