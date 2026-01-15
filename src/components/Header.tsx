@@ -12,9 +12,6 @@ export default function Header() {
                     <Link href="/" className={styles.link}>
                         Browse
                     </Link>
-                    <Link href="/add" className={styles.button}>
-                        Add Resource
-                    </Link>
                 </nav>
             </div>
         </header>
