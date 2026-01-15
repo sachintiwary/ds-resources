@@ -1,5 +1,6 @@
 export type Level = 'Novice' | 'Intermediate' | 'Advanced' | 'Expert';
 export type CategorySlug = 'foundations' | 'data-science' | 'ml' | 'dl' | 'nlp' | 'cv' | 'mlops' | 'gen-ai';
+export type ResourceType = 'Course' | 'Book' | 'Paper' | 'Tool' | 'Project' | 'Reference' | 'Deep Dive' | 'Framework' | 'Visualization' | 'Code' | 'System Design' | 'University';
 
 export type Resource = {
     id: number;
@@ -10,6 +11,7 @@ export type Resource = {
     category: CategorySlug;
     tags: string[];
     featured?: boolean;
+    type?: ResourceType; // Made optional to prevent massive refactor, or we can map it
 };
 
 export const RESOURCES: Resource[] = [
@@ -22,7 +24,8 @@ export const RESOURCES: Resource[] = [
         level: 'Novice',
         category: 'foundations',
         tags: ['Computer Science', 'Python', 'C', 'SQL'],
-        featured: true
+        featured: true,
+        type: 'Course'
     },
     {
         id: 2,
@@ -32,6 +35,7 @@ export const RESOURCES: Resource[] = [
         level: 'Novice',
         category: 'foundations',
         tags: ['Python', 'Coding'],
+        type: 'Course'
     },
     {
         id: 3,
@@ -41,7 +45,8 @@ export const RESOURCES: Resource[] = [
         level: 'Novice',
         category: 'foundations',
         tags: ['Math', 'Visualization'],
-        featured: true
+        featured: true,
+        type: 'Visualization'
     },
     {
         id: 4,
@@ -51,6 +56,7 @@ export const RESOURCES: Resource[] = [
         level: 'Novice',
         category: 'foundations',
         tags: ['Statistics', 'Probability'],
+        type: 'Course'
     },
 
     // --- LEVEL 1: INTERMEDIATE (Data Science) ---
@@ -62,7 +68,8 @@ export const RESOURCES: Resource[] = [
         level: 'Intermediate',
         category: 'data-science',
         tags: ['Pandas', 'Python', 'Practice'],
-        featured: true
+        featured: true,
+        type: 'Course'
     },
     {
         id: 11,
@@ -72,6 +79,7 @@ export const RESOURCES: Resource[] = [
         level: 'Intermediate',
         category: 'data-science',
         tags: ['Book', 'Reference'],
+        type: 'Book'
     },
     {
         id: 12,
@@ -81,6 +89,7 @@ export const RESOURCES: Resource[] = [
         level: 'Intermediate',
         category: 'data-science',
         tags: ['SQL', 'Database'],
+        type: 'Tool'
     },
     {
         id: 13,
@@ -90,6 +99,7 @@ export const RESOURCES: Resource[] = [
         level: 'Intermediate',
         category: 'data-science',
         tags: ['Tool', 'Visualization'],
+        type: 'Tool'
     },
 
     // --- LEVEL 2: ADVANCED (Machine Learning) ---
@@ -101,7 +111,8 @@ export const RESOURCES: Resource[] = [
         level: 'Advanced',
         category: 'ml',
         tags: ['Course', 'Certification', 'Standard'],
-        featured: true
+        featured: true,
+        type: 'Course'
     },
     {
         id: 21,
@@ -111,7 +122,8 @@ export const RESOURCES: Resource[] = [
         level: 'Advanced',
         category: 'ml',
         tags: ['Book', 'Code-Heavy'],
-        featured: true
+        featured: true,
+        type: 'Book'
     },
     {
         id: 22,
@@ -121,6 +133,7 @@ export const RESOURCES: Resource[] = [
         level: 'Advanced',
         category: 'dl',
         tags: ['Course', 'PyTorch'],
+        type: 'Course'
     },
     {
         id: 23,
@@ -130,7 +143,8 @@ export const RESOURCES: Resource[] = [
         level: 'Advanced',
         category: 'nlp',
         tags: ['Transformers', 'NLP'],
-        featured: true
+        featured: true,
+        type: 'Course'
     },
     {
         id: 24,
@@ -140,6 +154,7 @@ export const RESOURCES: Resource[] = [
         level: 'Advanced',
         category: 'cv',
         tags: ['University', 'Vision'],
+        type: 'University'
     },
 
     // --- LEVEL 3: EXPERT (GenAI & MLOps) ---
@@ -151,7 +166,8 @@ export const RESOURCES: Resource[] = [
         level: 'Expert',
         category: 'gen-ai',
         tags: ['Deep Dive', 'LLMs'],
-        featured: true
+        featured: true,
+        type: 'Deep Dive'
     },
     {
         id: 31,
@@ -161,7 +177,8 @@ export const RESOURCES: Resource[] = [
         level: 'Expert',
         category: 'mlops',
         tags: ['Production', 'Engineering'],
-        featured: true
+        featured: true,
+        type: 'Course'
     },
     {
         id: 32,
@@ -171,6 +188,7 @@ export const RESOURCES: Resource[] = [
         level: 'Expert',
         category: 'nlp',
         tags: ['Paper', 'Research'],
+        type: 'Paper'
     },
     {
         id: 33,
@@ -180,6 +198,7 @@ export const RESOURCES: Resource[] = [
         level: 'Expert',
         category: 'gen-ai',
         tags: ['Framework', 'Agents'],
+        type: 'Framework'
     },
     {
         id: 34,
@@ -189,6 +208,7 @@ export const RESOURCES: Resource[] = [
         level: 'Expert',
         category: 'dl',
         tags: ['Visualization', 'Research'],
+        type: 'Visualization'
     },
     {
         id: 35,
@@ -198,6 +218,7 @@ export const RESOURCES: Resource[] = [
         level: 'Expert',
         category: 'nlp',
         tags: ['Code', 'Implementation'],
+        type: 'Code'
     },
     {
         id: 36,
@@ -207,5 +228,6 @@ export const RESOURCES: Resource[] = [
         level: 'Expert',
         category: 'mlops',
         tags: ['System Design', 'Production'],
+        type: 'System Design'
     }
 ];
