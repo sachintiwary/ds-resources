@@ -3,7 +3,7 @@
     padding-bottom: 8rem;
 }
 
-/* --- GLASS HEADER --- */
+/* --- GLASS NAV --- */
 .navContainer {
     position: fixed;
     top: 2rem;
@@ -16,27 +16,25 @@
     display: flex;
     gap: 0.5rem;
     padding: 0.5rem;
-    background: rgba(200, 200, 200, 0.05);
-    /* Ultra subtle */
-    backdrop-filter: blur(24px);
-    -webkit-backdrop-filter: blur(24px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 100px;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
 }
 
 .navItem {
-    padding: 0.75rem 1.5rem;
+    padding: 0.8rem 2rem;
     border-radius: 100px;
     border: none;
     background: transparent;
     color: var(--text-secondary);
-    font-size: 0.9rem;
+    font-size: 0.95rem;
     font-weight: 500;
     cursor: pointer;
-    transition: all 0.4s var(--ease-out-quart);
+    transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
     position: relative;
-    overflow: hidden;
 }
 
 .navItem:hover {
@@ -45,15 +43,15 @@
 }
 
 .navItem.active {
-    background: rgba(255, 255, 255, 0.15);
+    background: rgba(255, 255, 255, 0.1);
     color: #fff;
     box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
-    text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+    text-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
 }
 
 /* --- HERO --- */
 .hero {
-    height: 90vh;
+    height: 70vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -68,50 +66,236 @@
 }
 
 .title {
-    font-size: clamp(4rem, 8vw, 7rem);
+    font-size: clamp(4rem, 9vw, 8rem);
     font-weight: 800;
-    line-height: 0.95;
-    letter-spacing: -0.04em;
-    margin-bottom: 2rem;
-    background: linear-gradient(180deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.6) 100%);
+    line-height: 0.9;
+    letter-spacing: -0.05em;
+    margin-bottom: 1.5rem;
+    color: #fff;
+}
+
+.titleGradient {
+    background: linear-gradient(180deg, #fff 0%, #888 100%);
     -webkit-background-clip: text;
     color: transparent;
-    filter: drop-shadow(0 0 40px rgba(255, 255, 255, 0.1));
 }
 
 .subtitle {
-    font-size: 1.25rem;
+    font-size: 1.4rem;
     color: var(--text-secondary);
     max-width: 500px;
     margin: 0 auto;
     font-weight: 300;
-    line-height: 1.6;
+    line-height: 1.5;
 }
 
-/* --- SECTION CONTAINERS --- */
+/* --- VAULT CONTROLS (Search & Filter) --- */
 .section {
-    max-width: 1400px;
+    max-width: 1600px;
     margin: 0 auto;
-    padding: 2rem 5vw;
+    padding: 0 4vw 4rem;
 }
 
-/* --- GLASS CARDS (Common) --- */
+.vaultControls {
+    margin-bottom: 3rem;
+    animation: fadeIn 0.5s ease-out;
+}
+
+.searchBar {
+    position: relative;
+    max-width: 600px;
+    margin: 0 auto 2rem;
+}
+
+.searchIcon {
+    position: absolute;
+    left: 1.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-secondary);
+}
+
+.searchInput {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 1.2rem 1.2rem 1.2rem 3.5rem;
+    color: #fff;
+    font-size: 1.1rem;
+    font-family: inherit;
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+}
+
+.searchInput:focus {
+    outline: none;
+    border-color: rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.05);
+    box-shadow: 0 0 30px rgba(255, 255, 255, 0.05);
+}
+
+.filterRow {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+}
+
+.filterChip {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: var(--text-secondary);
+    padding: 0.6rem 1.2rem;
+    border-radius: 50px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.filterChip:hover {
+    background: rgba(255, 255, 255, 0.08);
+    color: #fff;
+}
+
+.filterActive {
+    background: #fff;
+    color: #000;
+    border-color: #fff;
+    font-weight: 600;
+}
+
+.filterActive:hover {
+    background: #eee;
+    color: #000;
+}
+
+
+/* --- CARDS (Common Base) --- */
 .cardBase {
-    background: var(--glass-surface);
-    border: 1px solid var(--glass-border);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     border-radius: 24px;
     overflow: hidden;
-    transition: all 0.5s var(--ease-out-quart);
     position: relative;
 }
 
-/* --- ROADMAP ACCORDION --- */
+/* --- LIBRARY GRID --- */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 1.5rem;
+}
+
+.libCard {
+    composes: cardBase;
+    height: 300px;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    text-decoration: none;
+    color: inherit;
+    transition: border-color 0.3s;
+}
+
+.libCard:hover {
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.libContent {
+    z-index: 2;
+    position: relative;
+}
+
+.cardHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 2rem;
+}
+
+.idBadge {
+    font-family: monospace;
+    font-size: 3rem;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.05);
+    line-height: 0.8;
+}
+
+.arrowIcon {
+    color: rgba(255, 255, 255, 0.3);
+    transition: 0.3s;
+}
+
+.libCard:hover .arrowIcon {
+    color: #fff;
+    transform: translate(2px, -2px);
+}
+
+.libTitle {
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: rgba(255, 255, 255, 0.95);
+}
+
+.libDesc {
+    font-size: 0.95rem;
+    color: rgba(255, 255, 255, 0.5);
+    line-height: 1.5;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.cardFooter {
+    display: flex;
+    gap: 8px;
+    margin-top: auto;
+    position: relative;
+    z-index: 2;
+}
+
+.pill {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 6px 10px;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.05);
+    color: rgba(255, 255, 255, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Glow Effect */
+.cardGlow {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(circle at 100% 0%, rgba(255, 255, 255, 0.1), transparent 70%);
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    pointer-events: none;
+}
+
+.libCard:hover .cardGlow {
+    opacity: 1;
+}
+
+
+/* --- ROADMAPS --- */
 .roadmapList {
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
+    gap: 2rem;
+    max-width: 1000px;
+    margin: 0 auto;
 }
 
 .roadmapItem {
@@ -119,155 +303,114 @@
 }
 
 .roadmapHeader {
-    padding: 2.5rem;
+    padding: 3rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
     cursor: pointer;
+    transition: background 0.3s;
 }
 
-.roadmapHeader hover {
+.roadmapHeader:hover {
     background: rgba(255, 255, 255, 0.02);
 }
 
 .roleTitle {
-    font-size: 2rem;
-    font-weight: 700;
-    letter-spacing: -0.02em;
+    font-size: 2.2rem;
+    font-weight: 800;
     margin-bottom: 0.5rem;
+    color: #fff;
 }
 
 .roleDesc {
+    font-size: 1.1rem;
     color: var(--text-secondary);
-    font-size: 1rem;
 }
 
 .arrowWrapper {
-    width: 48px;
-    height: 48px;
+    width: 50px;
+    height: 50px;
     border-radius: 50%;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.05);
     display: flex;
     align-items: center;
     justify-content: center;
     transition: 0.3s;
 }
 
-.roadmapItem:hover .arrowWrapper {
+.roadmapHeader:hover .arrowWrapper {
     background: #fff;
     color: #000;
-    transform: scale(1.1);
 }
 
 .timeline {
     border-top: 1px solid rgba(255, 255, 255, 0.05);
     background: rgba(0, 0, 0, 0.2);
-    padding: 0 2.5rem 2.5rem;
+    padding: 0 3rem 3rem;
 }
 
 .phase {
     margin-top: 3rem;
-    border-left: 2px solid rgba(255, 255, 255, 0.1);
     padding-left: 2rem;
+    border-left: 2px solid rgba(255, 255, 255, 0.1);
     position: relative;
 }
 
-.phase::after {
+.phase::before {
     content: '';
     position: absolute;
-    left: -6px;
+    left: -7px;
     top: 0;
-    width: 10px;
-    height: 10px;
+    width: 12px;
+    height: 12px;
     background: #fff;
     border-radius: 50%;
-    box-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+}
+
+.phaseTitle {
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: #fff;
+}
+
+.phaseDesc {
+    color: var(--text-secondary);
+    margin-bottom: 1.5rem;
+}
+
+.phaseResources {
+    display: grid;
+    gap: 1rem;
 }
 
 .resourceLink {
-    display: block;
-    margin-top: 1rem;
     text-decoration: none;
-    padding: 1.25rem;
-    background: rgba(255, 255, 255, 0.03);
+    padding: 1.2rem;
     border-radius: 12px;
-    border: 1px solid transparent;
-    transition: 0.3s;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    transition: all 0.2s;
 }
 
 .resourceLink:hover {
     background: rgba(255, 255, 255, 0.08);
-    border-color: rgba(255, 255, 255, 0.2);
-    transform: translateX(10px);
+    transform: translateX(5px);
 }
 
-/* --- LIBRARY GRID --- */
-.grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: 2rem;
-}
-
-.libCard {
-    composes: cardBase;
-    height: 320px;
-    padding: 2rem;
+.resRow {
     display: flex;
-    flex-direction: column;
     justify-content: space-between;
-    text-decoration: none;
-    color: inherit;
+    align-items: center;
 }
 
-.libCard:hover {
-    transform: translateY(-10px) scale(1.02);
-    border-color: rgba(255, 255, 255, 0.3);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
-    background: rgba(255, 255, 255, 0.06);
-}
-
-/* Glowing Orb inside card */
-.cardGlow {
-    position: absolute;
-    top: -50px;
-    right: -50px;
-    width: 150px;
-    height: 150px;
-    background: radial-gradient(circle, rgba(255, 255, 255, 0.15) 0%, transparent 70%);
-    filter: blur(40px);
-    opacity: 0;
-    transition: 0.5s;
-}
-
-.libCard:hover .cardGlow {
-    opacity: 1;
-}
-
-.libContent {
-    z-index: 1;
-}
-
-.libTitle {
-    font-size: 1.5rem;
+.resName {
     font-weight: 600;
-    margin-bottom: 0.75rem;
+    color: #fff;
 }
 
-.libDesc {
-    color: var(--text-secondary);
-    line-height: 1.6;
-    font-size: 0.95rem;
-}
-
-.pill {
-    display: inline-block;
-    padding: 4px 10px;
-    border-radius: 50px;
-    font-size: 0.7rem;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    margin-right: 6px;
-    margin-top: auto;
+.resInfo {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.5);
 }
