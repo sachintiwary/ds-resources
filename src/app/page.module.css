@@ -1,7 +1,48 @@
+/* --- AMBIENT BACKGROUND LIGHT (The "Ghost Beam") --- */
+.ambientLight {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    /* Massive size to ensure coverage during rotation */
+    width: 200vmax;
+    height: 200vmax;
+    transform: translate(-50%, -50%);
+    z-index: 0;
+    /* Behind content */
+    pointer-events: none;
+
+    /* A single, sweeping beam of light */
+    background: conic-gradient(from 0deg,
+            transparent 0deg,
+            transparent 130deg,
+            rgba(255, 255, 255, 0.02) 150deg,
+            rgba(255, 255, 255, 0.06) 180deg,
+            /* Peak */
+            rgba(255, 255, 255, 0.02) 210deg,
+            transparent 230deg,
+            transparent 360deg);
+
+    filter: blur(80px);
+    animation: rotateAmbient 25s linear infinite;
+    mix-blend-mode: screen;
+}
+
+@keyframes rotateAmbient {
+    from {
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
+
+    to {
+        transform: translate(-50%, -50%) rotate(360deg);
+    }
+}
+
 .main {
     min-height: 100vh;
     padding-bottom: 8rem;
     overflow-x: hidden;
+    position: relative;
+    background-color: #050505;
 }
 
 /* --- HERO --- */
