@@ -5,147 +5,165 @@ import { ROADMAPS } from '@/data/roadmaps';
 import { RESOURCES, Level } from '@/data/resources';
 import styles from './page.module.css';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowRight, Box, Layers, Zap } from 'lucide-react';
-
-const icons: Record<string, any> = { 'Course': Layers, 'Book': Box, 'Paper': Zap, 'Tool': Box, 'Project': Layers };
+import { ArrowUpRight, ArrowDown } from 'lucide-react';
 
 export default function Home() {
-    const [view, setView] = useState<'pathways' | 'library'>('pathways');
-    const [expandedRoadmap, setExpandedRoadmap] = useState<string | null>(ROADMAPS[0].id);
-    const [filter, setFilter] = useState<Level | 'All'>('All');
+    const [activeTab, setActiveTab] = useState<'roadmap' | 'vault'>('roadmap');
+    const [openRoadmap, setOpenRoadmap] = useState<string | null>(null);
 
-    const filteredLib = RESOURCES.filter(r => filter === 'All' || r.level === filter);
+    // Animation variants
+    const containerVars = {
+        hidden: { opacity: 0 },
+        show: {
+            opacity: 1,
+            transition: { staggerChildren: 0.1 }
+        }
+    };
+
+    const itemVars = {
+        hidden: { opacity: 0, y: 30 },
+        show: { opacity: 1, y: 0, transition: { type: 'spring', stiffness: 50 } }
+    };
 
     return (
         <main className={styles.main}>
-            <nav className={styles.header}>
-                <div className={styles.logo}>
-                    <div className={styles.logoDot} />
-                    DS_RES // 1.0
-                </div>
-                <div className={styles.nav}>
+            {/* --- FLOATING GLASS NAV --- */}
+            <div className={styles.navContainer}>
+                <nav className={styles.glassNav}>
                     <button
-                        className={`${styles.navBtn} ${view === 'pathways' ? styles.active : ''}`}
-                        onClick={() => setView('pathways')}
+                        className={`${styles.navItem} ${activeTab === 'roadmap' ? styles.active : ''}`}
+                        onClick={() => setActiveTab('roadmap')}
                     >
-                        Pathways
+                        Guide
                     </button>
                     <button
-                        className={`${styles.navBtn} ${view === 'library' ? styles.active : ''}`}
-                        onClick={() => setView('library')}
+                        className={`${styles.navItem} ${activeTab === 'vault' ? styles.active : ''}`}
+                        onClick={() => setActiveTab('vault')}
                     >
-                        Library
+                        Vault
                     </button>
-                </div>
-            </nav>
+                </nav>
+            </div>
 
-            {view === 'pathways' && (
-                <>
-                    <section className={styles.hero}>
-                        <motion.h1
-                            initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
-                            className={styles.titleMain}
-                        >
-                            Systematic Mastery.
-                        </motion.h1>
-                        <motion.p
-                            initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.1 }}
-                            className={styles.heroDesc}
-                        >
-                            Structured learning protocols for high-leverage technical roles.
-                        </motion.p>
-                    </section>
+            {/* --- HERO SECTION --- */}
+            <header className={styles.hero}>
+                <motion.div
+                    initial={{ opacity: 0, scale: 0.95, filter: 'blur(10px)' }}
+                    animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
+                    transition={{ duration: 1 }}
+                    className={styles.heroContent}
+                >
+                    <h1 className={styles.title}>
+                        Neural <br /> Architecture
+                    </h1>
+                    <p className={styles.subtitle}>
+                        A curated intelligence layer for the modern AI engineer. <br />
+                        Minimalist. Essential. Glass-clear.
+                    </p>
+                </motion.div>
+            </header>
 
-                    <div className={styles.container}>
-                        <div className={styles.roadmapList}>
+            {/* --- CONTENT SWITCHER --- */}
+            <section className={styles.section}>
+                <AnimatePresence mode='wait'>
+                    {activeTab === 'roadmap' ? (
+                        <motion.div
+                            key="roadmap"
+                            variants={containerVars}
+                            initial="hidden"
+                            animate="show"
+                            exit={{ opacity: 0, filter: 'blur(10px)' }}
+                            className={styles.roadmapList}
+                        >
                             {ROADMAPS.map((rm) => (
-                                <div key={rm.id} className={styles.roadmapRow}>
+                                <motion.div
+                                    key={rm.id}
+                                    variants={itemVars}
+                                    className={styles.roadmapItem}
+                                >
                                     <div
                                         className={styles.roadmapHeader}
-                                        onClick={() => setExpandedRoadmap(expandedRoadmap === rm.id ? null : rm.id)}
+                                        onClick={() => setOpenRoadmap(openRoadmap === rm.id ? null : rm.id)}
                                     >
-                                        <div className={styles.rowLeft}>
-                                            <h2>{rm.role}</h2>
-                                            <p>{rm.description}</p>
+                                        <div>
+                                            <h2 className={styles.roleTitle}>{rm.role}</h2>
+                                            <p className={styles.roleDesc}>{rm.description}</p>
                                         </div>
-                                        <motion.div animate={{ rotate: expandedRoadmap === rm.id ? 90 : 0 }}>
-                                            <ArrowRight size={20} color="#666" />
-                                        </motion.div>
+                                        <div className={styles.arrowWrapper}>
+                                            <motion.div animate={{ rotate: openRoadmap === rm.id ? 180 : 0 }}>
+                                                <ArrowDown size={20} />
+                                            </motion.div>
+                                        </div>
                                     </div>
 
                                     <AnimatePresence>
-                                        {expandedRoadmap === rm.id && (
+                                        {openRoadmap === rm.id && (
                                             <motion.div
-                                                initial={{ height: 0 }} animate={{ height: 'auto' }} exit={{ height: 0 }}
-                                                className={styles.roadmapContent}
+                                                initial={{ height: 0, opacity: 0 }}
+                                                animate={{ height: 'auto', opacity: 1 }}
+                                                exit={{ height: 0, opacity: 0 }}
+                                                className={styles.timeline}
                                             >
-                                                <div className={styles.phaseList}>
-                                                    {rm.phases.map((phase, i) => (
-                                                        <div key={i} className={styles.phase}>
-                                                            <h3>{phase.title}</h3>
-                                                            {phase.resources.map((res, j) => (
-                                                                <a key={j} href={res.url} target="_blank" className={styles.resLink}>
-                                                                    <div className={styles.resTitle}>{res.title}</div>
-                                                                    <div className={styles.resMeta}>
-                                                                        <span>{res.type}</span>
-                                                                        {res.duration && <span>{res.duration}</span>}
-                                                                    </div>
-                                                                </a>
-                                                            ))}
-                                                        </div>
-                                                    ))}
-                                                </div>
+                                                {rm.phases.map((phase, i) => (
+                                                    <div key={i} className={styles.phase}>
+                                                        <h3 style={{ fontSize: '1.2rem', fontWeight: 600 }}>{phase.title}</h3>
+                                                        <p style={{ color: '#888', marginBottom: '1rem' }}>{phase.description}</p>
+                                                        {phase.resources.map((res, j) => (
+                                                            <a key={j} href={res.url} target="_blank" className={styles.resourceLink}>
+                                                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                                                    <span style={{ fontWeight: 600, fontSize: '1.1rem' }}>{res.title}</span>
+                                                                    <ArrowUpRight size={16} opacity={0.5} />
+                                                                </div>
+                                                                <div style={{ fontSize: '0.8rem', color: '#666', marginTop: '0.5rem' }}>
+                                                                    {res.type} • {res.duration || 'Self-paced'}
+                                                                </div>
+                                                            </a>
+                                                        ))}
+                                                    </div>
+                                                ))}
                                             </motion.div>
                                         )}
                                     </AnimatePresence>
-                                </div>
+                                </motion.div>
                             ))}
-                        </div>
-                    </div>
-                </>
-            )}
-
-            {view === 'library' && (
-                <div className={styles.container}>
-                    <div className={styles.filterBar}>
-                        {['All', 'Novice', 'Intermediate', 'Advanced', 'Expert'].map(f => (
-                            <button
-                                key={f}
-                                className={`${styles.filterBtn} ${filter === f ? styles.active : ''}`}
-                                onClick={() => setFilter(f as any)}
-                            >
-                                {f}
-                            </button>
-                        ))}
-                    </div>
-
-                    <motion.div layout className={styles.grid}>
-                        {filteredLib.map(r => {
-                            const Icon = icons[r.type as any] || Box;
-                            return (
+                        </motion.div>
+                    ) : (
+                        <motion.div
+                            key="vault"
+                            variants={containerVars}
+                            initial="hidden"
+                            animate="show"
+                            exit={{ opacity: 0, filter: 'blur(10px)' }}
+                            className={styles.grid}
+                        >
+                            {RESOURCES.map((r) => (
                                 <motion.a
-                                    layout
+                                    key={r.id}
                                     href={r.url}
                                     target="_blank"
-                                    key={r.id}
-                                    className={styles.card}
-                                    initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+                                    variants={itemVars}
+                                    className={styles.libCard}
                                 >
-                                    <div className={styles.cardIcon}>
-                                        <Icon size={20} />
+                                    <div className={styles.cardGlow} />
+                                    <div className={styles.libContent}>
+                                        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '2rem' }}>
+                                            <span style={{ fontSize: '3rem', fontWeight: 800, opacity: 0.1 }}>{r.id < 10 ? `0${r.id}` : r.id}</span>
+                                            <ArrowUpRight size={24} />
+                                        </div>
+
+                                        <h3 className={styles.libTitle}>{r.title}</h3>
+                                        <p className={styles.libDesc}>{r.description}</p>
                                     </div>
-                                    <div className={styles.cardTitle}>{r.title}</div>
-                                    <div className={styles.cardDesc}>{r.description}</div>
-                                    <div className={styles.cardFooter}>
-                                        <span className={styles.cardTag}>{r.level}</span>
-                                        <span className={styles.cardTag}>{r.category}</span>
+                                    <div style={{ marginTop: 'auto', paddingTop: '1rem' }}>
+                                        <span className={styles.pill}>{r.level}</span>
+                                        <span className={styles.pill}>{r.category}</span>
                                     </div>
                                 </motion.a>
-                            );
-                        })}
-                    </motion.div>
-                </div>
-            )}
+                            ))}
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+            </section>
         </main>
     );
 }
