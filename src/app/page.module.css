@@ -1,95 +1,108 @@
 .main {
     min-height: 100vh;
     padding-bottom: 8rem;
+    overflow-x: hidden;
+    /* Prevent horizontal scroll on mobile */
 }
 
 /* --- GLASS NAV --- */
 .navContainer {
     position: fixed;
-    top: 2rem;
+    top: 1.5rem;
     left: 50%;
     transform: translateX(-50%);
     z-index: 1000;
+    width: 90%;
+    max-width: 320px;
 }
 
 .glassNav {
     display: flex;
+    justify-content: center;
     gap: 0.5rem;
-    padding: 0.5rem;
-    background: rgba(255, 255, 255, 0.03);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 0.4rem;
+    /* FROZEN GLASS EFFECT */
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(40px) saturate(180%);
+    -webkit-backdrop-filter: blur(40px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-top-color: rgba(255, 255, 255, 0.25);
     border-radius: 100px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
 }
 
 .navItem {
-    padding: 0.8rem 2rem;
+    flex: 1;
+    padding: 0.7rem 0;
     border-radius: 100px;
     border: none;
     background: transparent;
-    color: var(--text-secondary);
-    font-size: 0.95rem;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.9rem;
     font-weight: 500;
     cursor: pointer;
     transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
     position: relative;
+    white-space: nowrap;
 }
 
-.navItem:hover {
-    color: #fff;
-    background: rgba(255, 255, 255, 0.05);
+.navItem:active {
+    transform: scale(0.95);
 }
 
 .navItem.active {
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.15);
     color: #fff;
-    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
-    text-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.2);
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+    font-weight: 600;
 }
 
 /* --- HERO --- */
 .hero {
-    height: 70vh;
+    min-height: 60vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     text-align: center;
-    padding: 0 2rem;
+    padding: 8rem 1.5rem 2rem;
+    /* Add top padding for nav */
     perspective: 1000px;
 }
 
 .heroContent {
+    width: 100%;
     max-width: 900px;
 }
 
 .title {
-    font-size: clamp(4rem, 9vw, 8rem);
+    font-size: clamp(3rem, 10vw, 8rem);
+    /* Responsive font sizing */
     font-weight: 800;
     line-height: 0.9;
-    letter-spacing: -0.05em;
+    letter-spacing: -0.04em;
     margin-bottom: 1.5rem;
     color: #fff;
 }
 
 .titleGradient {
-    background: linear-gradient(180deg, #fff 0%, #888 100%);
+    background: linear-gradient(180deg, #fff 20%, rgba(255, 255, 255, 0.4) 100%);
     -webkit-background-clip: text;
     color: transparent;
 }
 
 .subtitle {
-    font-size: 1.4rem;
+    font-size: clamp(1rem, 4vw, 1.4rem);
     color: var(--text-secondary);
     max-width: 500px;
     margin: 0 auto;
     font-weight: 300;
     line-height: 1.5;
+    padding: 0 1rem;
 }
 
-/* --- VAULT CONTROLS (Search & Filter) --- */
+/* --- VAULT CONTROLS --- */
 .section {
     max-width: 1600px;
     margin: 0 auto;
@@ -105,33 +118,38 @@
     position: relative;
     max-width: 600px;
     margin: 0 auto 2rem;
+    width: 100%;
 }
 
 .searchIcon {
     position: absolute;
-    left: 1.5rem;
+    left: 1.2rem;
     top: 50%;
     transform: translateY(-50%);
     color: var(--text-secondary);
+    pointer-events: none;
 }
 
 .searchInput {
     width: 100%;
-    background: rgba(255, 255, 255, 0.03);
+    /* FROZEN INPUT */
+    background: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(255, 255, 255, 0.1);
+    border-top-color: rgba(255, 255, 255, 0.2);
     border-radius: 20px;
-    padding: 1.2rem 1.2rem 1.2rem 3.5rem;
+    padding: 1rem 1rem 1rem 3rem;
     color: #fff;
-    font-size: 1.1rem;
+    font-size: 1rem;
     font-family: inherit;
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
     transition: all 0.3s ease;
 }
 
 .searchInput:focus {
     outline: none;
-    border-color: rgba(255, 255, 255, 0.3);
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.4);
     box-shadow: 0 0 30px rgba(255, 255, 255, 0.05);
 }
 
@@ -139,70 +157,80 @@
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
-    gap: 0.8rem;
+    gap: 0.6rem;
+    padding: 0 1rem;
 }
 
 .filterChip {
-    background: rgba(255, 255, 255, 0.02);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     color: var(--text-secondary);
-    padding: 0.6rem 1.2rem;
+    padding: 0.5rem 1rem;
     border-radius: 50px;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     cursor: pointer;
     transition: all 0.2s;
+    white-space: nowrap;
+    -webkit-tap-highlight-color: transparent;
 }
 
-.filterChip:hover {
-    background: rgba(255, 255, 255, 0.08);
-    color: #fff;
+.filterChip:active {
+    transform: scale(0.95);
 }
 
 .filterActive {
-    background: #fff;
+    background: rgba(255, 255, 255, 0.9);
     color: #000;
     border-color: #fff;
     font-weight: 600;
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
 }
 
-.filterActive:hover {
-    background: #eee;
-    color: #000;
-}
-
-
-/* --- CARDS (Common Base) --- */
+/* --- CARDS (FROZEN BASE) --- */
 .cardBase {
-    background: rgba(255, 255, 255, 0.02);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-top-color: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(30px) saturate(120%);
+    -webkit-backdrop-filter: blur(30px) saturate(120%);
     border-radius: 24px;
     overflow: hidden;
     position: relative;
+    box-shadow: 0 4px 24px -1px rgba(0, 0, 0, 0.2);
 }
 
 /* --- LIBRARY GRID --- */
 .grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 1.5rem;
+}
+
+/* Mobile specific grid adjustment */
+@media (max-width: 600px) {
+    .grid {
+        grid-template-columns: 1fr;
+        /* Single column on mobile */
+        gap: 1rem;
+    }
 }
 
 .libCard {
     composes: cardBase;
     height: 300px;
-    padding: 2rem;
+    /* Default height */
+    padding: 1.5rem;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     text-decoration: none;
     color: inherit;
-    transition: border-color 0.3s;
+    transition: transform 0.3s, border-color 0.3s;
+    -webkit-tap-highlight-color: transparent;
 }
 
-.libCard:hover {
-    border-color: rgba(255, 255, 255, 0.2);
+.libCard:active {
+    transform: scale(0.98);
 }
 
 .libContent {
@@ -214,12 +242,12 @@
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    margin-bottom: 2rem;
+    margin-bottom: 1.5rem;
 }
 
 .idBadge {
     font-family: monospace;
-    font-size: 3rem;
+    font-size: 2.5rem;
     font-weight: 700;
     color: rgba(255, 255, 255, 0.05);
     line-height: 0.8;
@@ -227,24 +255,19 @@
 
 .arrowIcon {
     color: rgba(255, 255, 255, 0.3);
-    transition: 0.3s;
-}
-
-.libCard:hover .arrowIcon {
-    color: #fff;
-    transform: translate(2px, -2px);
 }
 
 .libTitle {
-    font-size: 1.4rem;
+    font-size: 1.3rem;
     font-weight: 700;
     margin-bottom: 0.5rem;
     color: rgba(255, 255, 255, 0.95);
+    line-height: 1.2;
 }
 
 .libDesc {
-    font-size: 0.95rem;
-    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.6);
     line-height: 1.5;
     display: -webkit-box;
     -webkit-line-clamp: 3;
@@ -254,47 +277,30 @@
 
 .cardFooter {
     display: flex;
-    gap: 8px;
+    gap: 6px;
     margin-top: auto;
     position: relative;
     z-index: 2;
+    flex-wrap: wrap;
 }
 
 .pill {
-    font-size: 0.75rem;
+    font-size: 0.7rem;
     text-transform: uppercase;
     letter-spacing: 0.05em;
     padding: 6px 10px;
-    border-radius: 6px;
-    background: rgba(255, 255, 255, 0.05);
-    color: rgba(255, 255, 255, 0.7);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.08);
+    color: rgba(255, 255, 255, 0.8);
     border: 1px solid rgba(255, 255, 255, 0.05);
 }
-
-/* Glow Effect */
-.cardGlow {
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 200px;
-    height: 200px;
-    background: radial-gradient(circle at 100% 0%, rgba(255, 255, 255, 0.1), transparent 70%);
-    opacity: 0;
-    transition: opacity 0.5s ease;
-    pointer-events: none;
-}
-
-.libCard:hover .cardGlow {
-    opacity: 1;
-}
-
 
 /* --- ROADMAPS --- */
 .roadmapList {
     display: flex;
     flex-direction: column;
     gap: 2rem;
-    max-width: 1000px;
+    max-width: 900px;
     margin: 0 auto;
 }
 
@@ -303,56 +309,65 @@
 }
 
 .roadmapHeader {
-    padding: 3rem;
+    padding: 2rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
     cursor: pointer;
-    transition: background 0.3s;
-}
-
-.roadmapHeader:hover {
-    background: rgba(255, 255, 255, 0.02);
+    -webkit-tap-highlight-color: transparent;
 }
 
 .roleTitle {
-    font-size: 2.2rem;
+    font-size: 1.8rem;
+    /* Smaller on mobile */
     font-weight: 800;
     margin-bottom: 0.5rem;
     color: #fff;
+    line-height: 1.1;
 }
 
 .roleDesc {
-    font-size: 1.1rem;
+    font-size: 1rem;
     color: var(--text-secondary);
 }
 
 .arrowWrapper {
-    width: 50px;
-    height: 50px;
+    width: 44px;
+    height: 44px;
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(255, 255, 255, 0.08);
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: 0.3s;
-}
-
-.roadmapHeader:hover .arrowWrapper {
-    background: #fff;
-    color: #000;
+    flex-shrink: 0;
+    /* Prevent squishing */
 }
 
 .timeline {
-    border-top: 1px solid rgba(255, 255, 255, 0.05);
-    background: rgba(0, 0, 0, 0.2);
-    padding: 0 3rem 3rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(0, 0, 0, 0.15);
+    padding: 0 1.5rem 2rem;
+    /* Reduced padding */
+}
+
+@media (min-width: 601px) {
+    .timeline {
+        padding: 0 3rem 3rem;
+    }
+
+    .roadmapHeader {
+        padding: 3rem;
+    }
+
+    .roleTitle {
+        font-size: 2.2rem;
+    }
 }
 
 .phase {
-    margin-top: 3rem;
-    padding-left: 2rem;
-    border-left: 2px solid rgba(255, 255, 255, 0.1);
+    margin-top: 2.5rem;
+    padding-left: 1.5rem;
+    border-left: 2px solid rgba(255, 255, 255, 0.15);
     position: relative;
 }
 
@@ -365,11 +380,11 @@
     height: 12px;
     background: #fff;
     border-radius: 50%;
-    box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.6);
 }
 
 .phaseTitle {
-    font-size: 1.4rem;
+    font-size: 1.2rem;
     font-weight: 700;
     margin-bottom: 0.5rem;
     color: #fff;
@@ -377,26 +392,27 @@
 
 .phaseDesc {
     color: var(--text-secondary);
-    margin-bottom: 1.5rem;
+    margin-bottom: 1.2rem;
+    font-size: 0.95rem;
 }
 
 .phaseResources {
     display: grid;
-    gap: 1rem;
+    gap: 0.8rem;
 }
 
 .resourceLink {
     text-decoration: none;
-    padding: 1.2rem;
+    padding: 1rem;
     border-radius: 12px;
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    transition: all 0.2s;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    transition: background 0.2s;
+    -webkit-tap-highlight-color: transparent;
 }
 
-.resourceLink:hover {
-    background: rgba(255, 255, 255, 0.08);
-    transform: translateX(5px);
+.resourceLink:active {
+    background: rgba(255, 255, 255, 0.1);
 }
 
 .resRow {
@@ -408,9 +424,10 @@
 .resName {
     font-weight: 600;
     color: #fff;
+    font-size: 0.95rem;
 }
 
 .resInfo {
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     color: rgba(255, 255, 255, 0.5);
 }
