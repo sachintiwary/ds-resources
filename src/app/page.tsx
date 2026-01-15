@@ -45,23 +45,23 @@ async function getCategories() {
   }
 }
 
-export default async function Home({ searchParams }: { searchParams: Promise<{ category?: string; search?: string }> }) {
-  const { category, search } = await searchParams; // Next.js 15 requires awaiting searchParams, or 14 works directly. Safest to await if type says Promise, but here type is object. 
-  // Wait, in Next.js 15 searchParams is a Promise. In 14 it's an object. 
-  // Since I just installed latest, it's likely 15 (RC) or 14 latest. 
-  // Let's assume standard object for now or await if needed.
-  // Actually, standard Next.js 14 Page props `searchParams` is NOT a promise. 
-  // Next.js 15 makes it a promise.
-  // I will treat it as object for now, if error (searchParams.category undefined) I will fix.
+async function searchAction(formData: FormData) {
+  'use server';
+  const query = formData.get('query');
+  redirect(`/?search=${query}`);
+}
+
+export default async function Home({
+  searchParams
+}: {
+  searchParams: Promise<{ category?: string; search?: string }> | { category?: string; search?: string }
+}) {
+  const resolvedSearchParams = await searchParams;
+  const category = resolvedSearchParams.category;
+  const search = resolvedSearchParams.search;
 
   const resources = await getResources(category, search);
   const categories = await getCategories();
-
-  async function searchAction(formData: FormData) {
-    'use server';
-    const query = formData.get('query');
-    redirect(`/?search=${query}`);
-  }
 
   return (
     <div className={styles.page}>
